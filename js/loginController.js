@@ -30,6 +30,7 @@ app.controller('loginController', function ($scope,$http) {
 
         }, function myError(response) {
             console.log(response)
+            window.location.replace('#!error/404/message/page not found');
 
         });
         console.log( $scope.username )

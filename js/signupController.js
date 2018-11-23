@@ -31,12 +31,15 @@ app.controller('signupController', function ($scope, $http) {
                     // ---------------------------------------------------------untested code---------------------
                     if(response.data == "Legitamate User"){
                         window.location.replace('#!');
+                    }else if(response.statusCode == 500){
+                        window.location.replace('#!error/500/Internal server error');
                     }
             // ---------------------------------------------------------------------------------------------------------
 
 
                 }, function myError(response) {
                     console.log(response)
+                    window.location.replace('#!error/404/message/page not found');
 
                 });
             } else {
