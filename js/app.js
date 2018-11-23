@@ -7,7 +7,11 @@ app.config(function ($routeProvider) {
         })
         .when("/signup", {
             templateUrl: "html/signup.html"
-        });
+        }).when("/home", {
+        templateUrl: "html/home.html"
+    }).when("/error/:code/message/:message", {
+        templateUrl: "html/error.html"
+    });
 
 });
 

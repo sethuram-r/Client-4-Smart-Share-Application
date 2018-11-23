@@ -28,6 +28,13 @@ app.controller('signupController', function ($scope, $http) {
                 }).then(function mySuccess(response) {
                     console.log(response.data)
 
+                    // ---------------------------------------------------------untested code---------------------
+                    if(response.data == "Legitamate User"){
+                        window.location.replace('#!');
+                    }
+            // ---------------------------------------------------------------------------------------------------------
+
+
                 }, function myError(response) {
                     console.log(response)
 
