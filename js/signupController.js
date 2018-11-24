@@ -23,20 +23,35 @@ app.controller('signupController', function ($scope, $http) {
 
                 $http({
                     method: "POST",
-                    url: "http://localhost:5000/signup",
+                    url: "http://localhost:9000/signup",
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                     data: data
                 }).then(function mySuccess(response) {
                     console.log(response.data)
-
-                    // ---------------------------------------------------------untested code---------------------
                     if(response.data == "Legitamate User"){
-                        window.location.replace('#!');
+                        // window.location.replace('#!');
+                        $http({
+                            method: "POST",
+                            url: "http://localhost:9000/signin",
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            data: data
+                        }).then(function mySuccess(response) {
+                            console.log(response.data)
+                            if(response.data == "Legitamate User"){
+                                window.location.replace('#!home');
+                            }else if(response.statusCode == "403"){
+                                window.location.replace('#!error/403/message/Access Denied');
+                            }
+
+                        }, function myError(response) {
+                            console.log(response)
+                            window.location.replace('#!error/404/message/page not found');
+
+                        });
+
                     }else if(response.statusCode == 500){
                         window.location.replace('#!error/500/Internal server error');
                     }
-            // ---------------------------------------------------------------------------------------------------------
-
-
                 }, function myError(response) {
                     console.log(response)
                     window.location.replace('#!error/404/message/page not found');
