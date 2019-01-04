@@ -1,16 +1,16 @@
 app.controller('signupController', function ($scope, $http) {
 
-    console.log("inside signup Controller")
-    $scope.username = ""
-    $scope.password = ""
-    $scope.confirmPassword = ""
-    $scope.alert = false
+    console.log("inside signup Controller");
+    $scope.username = "";
+    $scope.password = "";
+    $scope.confirmPassword = "";
+    $scope.alert = false;
     $scope.change = function () {
         $scope.alert = false
-    }
+    };
     $scope.submit = function () {
 
-        console.log("clicked")
+        console.log("clicked");
 
         if ($scope.username != "") {
             if ($scope.password == $scope.confirmPassword) {
@@ -19,7 +19,7 @@ app.controller('signupController', function ($scope, $http) {
                     username: $scope.username,
                     password: $scope.password
 
-                })
+                });
 
                 $http({
                     method: "POST",
@@ -27,16 +27,17 @@ app.controller('signupController', function ($scope, $http) {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                     data: data
                 }).then(function mySuccess(response) {
-                    console.log(response.data)
+                    console.log(response.data);
                     if(response.data == "Legitamate User"){
                         // window.location.replace('#!');
                         $http({
                             method: "POST",
                             url: "http://localhost:9000/signin",
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                            data: data
+                            data: data,
+                            withCredentials: true
                         }).then(function mySuccess(response) {
-                            console.log(response.data)
+                            console.log(response.data);
                             if(response.data == "Legitamate User"){
                                 window.location.replace('#!home');
                             }else if(response.statusCode == "403"){
@@ -44,7 +45,7 @@ app.controller('signupController', function ($scope, $http) {
                             }
 
                         }, function myError(response) {
-                            console.log(response)
+                            console.log(response);
                             window.location.replace('#!error/404/message/page not found');
 
                         });
@@ -53,18 +54,18 @@ app.controller('signupController', function ($scope, $http) {
                         window.location.replace('#!error/500/Internal server error');
                     }
                 }, function myError(response) {
-                    console.log(response)
+                    console.log(response);
                     window.location.replace('#!error/404/message/page not found');
 
                 });
             } else {
-                $scope.alert = true
-                $scope.message = "password and confirm password doesn't match"
-                $scope.password = ""
+                $scope.alert = true;
+                $scope.message = "password and confirm password doesn't match";
+                $scope.password = "";
                 $scope.confirmPassword = ""
             }
         } else {
-            $scope.alert = true
+            $scope.alert = true;
             $scope.message = "Please fill user name"
         }
 

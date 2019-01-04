@@ -2,8 +2,8 @@
     d3.layout.treelist = function () {
         "use strict";
         var hierarchy = d3.layout.hierarchy().sort(null).value(null),
-            nodeHeight = 20,
-            childIndent = 20,
+            nodeHeight = 0,
+            childIndent = 0,
             size;
 
         var treelist = function (d, i) {
@@ -28,7 +28,7 @@
             function layout(node) {
                 //all children of the same parent are rendered on the same  x level
                 //y increases every time a child is added to the list
-                var x = 0, y = 0;
+                var x = 0, y = 10;
                 visit(function (n, index, parent) {
                     x = parent ? parent.x + childIndent : 0;
                     y = y + nodeHeight;

@@ -5,6 +5,20 @@
 
     .selected{
         color: orange;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .icon-selected {
+        color: orangered;
+    }
+
+    .icon-visible {
+        visibility: inherit;
+    }
+
+    .icon-invisible {
+        visibility: hidden;
     }
     .node {
         position: absolute;
@@ -21,6 +35,45 @@
 
 </style>
 <body>
-<div ng-controller="fileController"/>
+<div ng-controller="fileController">
+    <div class="container-fluid">
+        <div class="row">
+            <div class=col-6>
+                <div class="tree"></div>
+            </div>
+            <div class=col-5>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">{{path}}</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-1">
+                <div class="row" style="height: 10%"></div>
+                <div class="row">
+                    <div class="col-3" ng-hide="addVisible">
+                        <a class="btn btn-success" ng-click="add()" }>
+                            <i class=" glyphicon glyphicon-plus" style="color: white"></i>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a class="btn btn-primary" ng-click="download()">
+                            <i class=" glyphicon glyphicon-cloud-download" style="color: white"></i>
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <a class="btn btn-danger" ng-click="delete()">
+                            <i class=" glyphicon glyphicon-trash" style="color: white"></i>
+                        </a>
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
 </body>
 
