@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+
 <style>
 
     .selected{
@@ -33,47 +33,268 @@
         font-size: 10px;
     }
 
+    .file-uploader {
+        background-color: #dbefe9;
+        border-radius: 3px;
+        color: #242424;
+
+    }
+
+    .file-uploader__message-area {
+        font-size: 18px;
+        padding: 1em;
+        text-align: center;
+        color: #377a65;
+    }
+
+    .file-list {
+        background-color: white;
+        font-size: 16px;
+    }
+
+    .file-list__name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .file-list li {
+        /*height: 50px;*/
+        line-height: 50px;
+        margin-left: .5em;
+        overflow: hidden;
+    }
+
+    .removal-button {
+        font-weight: bold;
+        /*width: 20%;*/
+        border: none;
+        /*background-color: #d65d38;*/
+        color: black;
+        padding-right: 15px;
+    }
+
+    .removal-button::before {
+        content: "x";
+    }
+
+    .removal-button:focus {
+        outline: 0;
+    }
+
+    .file-chooser {
+        padding: 1em;
+        transition: background-color 1s, height 1s;
+    }
+
+    .file-chooser p {
+        font-size: 18px;
+        padding-top: 1em;
+    }
+
+    .file-uploader {
+        max-width: 400px;
+        height: auto;
+        margin: 2em auto;
+    }
+
+    .file-uploader * {
+        display: block;
+    }
+
+    .file-uploader input[type=submit] {
+        margin-top: 2em;
+        float: right;
+    }
+
+    .file-list {
+        margin: 0 auto;
+        max-width: 90%;
+    }
+
+    .file-list__name {
+        max-width: 70%;
+        float: left;
+    }
+
+    .removal-button {
+        display: inline-block;
+        height: 100%;
+        float: right;
+    }
+
+    .file-chooser {
+        width: 90%;
+        margin: .5em auto;
+    }
+
+    /*.file-chooser__input {*/
+    /*margin: 0 auto;*/
+    /*}*/
+
+    .file-uploader__submit-button {
+        width: 100%;
+        border: none;
+        font-size: 1.5em;
+        padding: 1em;
+        background-color: #72bfa7;
+        color: white;
+    }
+
+    .file-uploader__submit-button:hover {
+        background-color: #a7d7c8;
+    }
+
+    .file-list li:after, .file-uploader:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .hidden input {
+        display: none;
+    }
+
+    .error {
+        background-color: #d65d38;
+        color: white;
+    }
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    ul, li {
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-item {
+        cursor: pointer;
+    }
+
+
 </style>
 <body>
-<div ng-controller="fileController">
-    <div class="container-fluid">
-        <div class="row">
-            <div class=col-6>
-                <div class="tree"></div>
-            </div>
-            <div class=col-5>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">{{path}}</li>
-                    </ol>
-                </nav>
-            </div>
-            <div class="col-1">
-                <div class="row" style="height: 10%"></div>
-                <div class="row">
-                    <div class="col-3" ng-hide="addVisible">
-                        <a class="btn btn-success" ng-click="add()" }>
-                            <i class=" glyphicon glyphicon-plus" style="color: white"></i>
-                        </a>
-                    </div>
-                    <div class="col-3">
-                        <a class="btn btn-primary" ng-click="download()">
-                            <i class=" glyphicon glyphicon-cloud-download" style="color: white"></i>
-                        </a>
-                    </div>
-                    <div class="col-3">
-                        <a class="btn btn-danger" ng-click="delete()">
-                            <i class=" glyphicon glyphicon-trash" style="color: white"></i>
-                        </a>
-                    </div>
-                    <div class="col-3"></div>
-                </div>
 
+<div class="container-fluid" ng-controller="fileController">
+    <div class="row">
+        <div class=col-6>
+            <div class="tree"></div>
+        </div>
+        <div class=col-5>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">{{path}}</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col-1">
+            <div class="row" style="height: 10%"></div>
+            <div class="row">
+                <div class="col-2" ng-hide="addVisible" style="padding-left: 0px;padding-right: 23px">
+                    <a class="btn btn-success btn-sm" data-toggle="modal" data-target="#uploadModal">
+                        <i class="fas fa-cloud-upload-alt " style="color: white; "></i>
+                    </a>
+                </div>
+                <div class="col-2" style="padding-right: 23px">
+                    <a class="btn btn-primary btn-sm" ng-click="download()">
+                        <i class=" fas fa-cloud-download-alt " style="color: white"></i>
+                    </a>
+                </div>
+                <div class="col-2">
+                    <a class="btn btn-danger btn-sm" ng-click="delete()">
+                        <i class=" fas fa-trash-alt" style="color: white"></i>
+                    </a>
+                </div>
             </div>
+
         </div>
     </div>
 
 
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" id="uploadModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Upload</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="file-tab" data-toggle="tab" data-target="#file" role="tab"
+                               aria-controls="file" aria-selected="true">File</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" data-target="#folder" role="tab"
+                               aria-controls="folder" aria-selected="false">Folder</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="file" role="tabpanel" aria-labelledby="file-tab">
+                            <div class="modal-body">
+                                <form ng-submit="upload()" class="card" enctype="multipart/form-data" id="uploadForm">
+                                    <div class="card-header">
+                                        <p>Select a file to upload</p>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="input-group mb-3">
+                                            <div class="custom-file file-chooser">
+                                                <input type="file" class="custom-file-input file-chooser__input"
+                                                       id="inputGroupFile02">
+                                                <label class="custom-file-label" for="inputGroupFile02"
+                                                       aria-describedby="inputGroupFileAddon02">Choose file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <input class="btn btn-info float-right" type="submit" value="Upload">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="folder" role="tabpanel" aria-labelledby="folder-tab">
+                            <div class="modal-body">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="input-group mb-3">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="inputGroupFolder"
+                                                       webkitdirectory mozdirectory msdirectory odirectory directory
+                                                       multiple="multiple"/>
+                                                <label class="custom-file-label" for="inputGroupFolder"
+                                                       aria-describedby="inputGroupFolderAddon02">Choose Folder</label>
+                                            </div>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-info" type="button"
+                                                        id="inputGroupFileAddon04" ng-click="upload()">Upload
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 </body>
 

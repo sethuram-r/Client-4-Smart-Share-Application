@@ -8,11 +8,10 @@ app.controller('fileController', function ($scope,$http) {
     $scope.addVisible = false;
     $scope.selectedFileorFoler = "";
     $scope.contents = [];
+    $scope.files = [];
 
 
-    $scope.add = function () {
-        console.log("add")
-    };
+
 
 
     $scope.childrenFinder = function (data, path) {
@@ -25,6 +24,209 @@ app.controller('fileController', function ($scope,$http) {
         }
 
     };
+
+    $('#inputGroupFile02').on('change', function () {
+        console.log("inside");
+        //get the file name
+        var temp = $(this).val().split("\\");
+        var fileName = temp[temp.length - 1];
+        //replace the "Choose a file" label
+        $('.custom-file-label').html(fileName)
+        // $(this).next('.custom-file-label').html(fileName);
+    });
+
+
+    $scope.upload = function () {
+
+        console.log($scope.selectedFileorFoler);
+
+        if ($scope.selectedFileorFoler == undefined) {
+            alert("please select the folder")
+        } else {
+
+            var temp = $scope.files;
+
+            console.log($scope.files);
+
+            temp.forEach(function (file) {
+                if ("uploadId" in file) delete file["uploadId"];
+            });
+
+            $http({
+                method: "POST",
+                url: "http://localhost:9000/file-server/upload-object",
+                data: temp
+            }).then(function mySuccess(response) {
+                console.log(response.data);
+                if (response.data = "Success") {
+                    $('#uploadModal').modal('hide');
+                    location.reload();
+                }
+
+            }, function myError(error) {
+                console.log(error);
+                alert("Error in Uploading")
+            });
+        }
+
+    };
+
+
+    $("#inputGroupFolder").change(function (e) {
+        console.log("change");
+        console.log(e.target.files);
+        console.log($scope.selectedFileorFoler);
+
+        var selectedFolder = $scope.selectedFileorFoler + "/";
+
+
+        var temp = {};
+        temp["file"] = "";
+        temp["name"] = "";
+        if ($scope.selectedFileorFoler == "file.server.1") {
+            temp["path"] = e.target.files[0].webkitRelativePath.replace(e.target.files[0].name, "").trim()
+        } else {
+            temp["path"] = selectedFolder + e.target.files[0].webkitRelativePath.replace(e.target.files[0].name, "").trim()
+        }
+        $scope.files.push(temp);
+        console.log($scope.files);
+        var uploadedFiles = e.target.files;
+        Array.from(uploadedFiles).forEach(file => {
+            console.log((file));
+            var fileName = file.name;
+            var path = file.webkitRelativePath;
+            var reader = new FileReader();
+
+            if (fileName == ".DS_Store") {
+                var temp = {};
+                temp["file"] = "";
+                temp["name"] = "";
+                if ($scope.selectedFileorFoler == "file.server.1") {
+                    temp["path"] = path.replace(fileName, "").trim()
+                } else {
+                    temp["path"] = selectedFolder + path.replace(fileName, "").trim()
+                }
+                $scope.files.push(temp)
+            } else {
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    if (reader.result) {
+                        var temp = {};
+                        temp["file"] = reader.result.split(',')[1];
+                        temp["name"] = file.name;
+                        if ($scope.selectedFileorFoler == "file.server.1") {
+                            temp["path"] = path.replace(fileName, "").trim()
+                        } else {
+                            temp["path"] = selectedFolder + path.replace(fileName, "").trim()
+                        }
+                        $scope.files.push(temp)
+                    }
+                };
+                reader.onerror = function (error) {
+                    console.log('Error: ', error);
+                };
+            }
+
+
+        })
+        
+    });
+
+
+    var initialUpload = function () {
+        //jQuery plugin
+        (function ($) {
+
+            $.fn.uploader = function () {
+
+                var uploadId = 1;
+
+                //create and add the file list and the hidden input list
+                var fileList = $('<ul class="list-group"></ul>');
+                $('.card-header').after(fileList);
+                //when choosing a file, add the name to the list and copy the file input into the hidden inputs
+
+                $('.file-chooser__input').on('change', function () {
+
+
+                    if ($(this).val() != "") {
+                        console.log($(this)[0].files[0]["name"]);
+                        $scope.fileName = $(this)[0].files[0]["name"];
+
+                        var reader = new FileReader();
+                        reader.readAsDataURL($(this)[0].files[0]);
+                        reader.onload = function () {
+                            console.log(reader.result);
+
+
+                            var temp = {};
+
+                            temp["uploadId"] = uploadId;
+                            temp["file"] = reader.result.split(',')[1];
+                            temp["name"] = $scope.fileName;
+                            temp["path"] = $scope.selectedFileorFoler + "/";
+                            $scope.files.push(temp);
+
+                            // var temp = $(this).val().split("\\")
+                            var fileName = $scope.fileName;
+                            $('.file-chooser').append($('.file-chooser__input').clone({withDataAndEvents: true}));
+
+                            //add the name and a remove button to the list-group
+                            $('.list-group').append('<li  class="list-group-item" ><span class="list-group__name">' + fileName + '</span><button class="removal-button"  data-uploadid="' + uploadId + '"></button></li>');
+                            $('.list-group').find("li:last").show(700);
+                            //removal button handle
+
+                            $('.removal-button').on('click', function (e) {
+                                e.preventDefault();
+
+                                var listId = $(this).data('uploadid');
+                                var temp = $scope.files.filter(function (file) {
+                                    return file["uploadId"] != listId
+                                });
+                                $scope.files = temp;
+
+                                //remove the name from list-group that corresponds to the button clicked
+                                $(this).parent().hide("puff").delay(10).queue(function () {
+                                    $(this).remove();
+                                });
+
+                                //if the list is now empty, change the text back
+                                if ($scope.files.length === 0) {
+                                    $('.card-header').text("No files selected. Please select a file.");
+                                    $('.custom-file-label').html("Choose File")
+                                }
+                            });
+
+                            //so the event handler works on the new "real" one
+                            $('.file-chooser__input').removeClass('file-chooser__input').attr('data-uploadId', uploadId);
+
+                            //update the message area
+                            $('.card-header').text("List of Files to Upload");
+
+                            uploadId++;
+                        };
+                        reader.onerror = function (error) {
+                            console.log('Error: ', error);
+                        };
+
+
+                    } else {
+                        $('.custom-file-label').html("Choose File")
+                    }
+                });
+            };
+        }(jQuery));
+
+//init
+        $(document).ready(function () {
+            $('.fileUploader').uploader({
+                MessageAreaText: "No files selected. Please select a file."
+            });
+        });
+
+    };
+
+    initialUpload();
 
 
     $scope.download = function () {
@@ -162,11 +364,61 @@ app.controller('fileController', function ($scope,$http) {
 
 
     };
+
+
     $scope.delete = function () {
-        console.log("delete")
+        console.log("delete");
+        $scope.allUrls = [];
+
+        var deleteUrlExtractor = function (temp) {
+
+            for (var g in temp) {
+                var dict = {};
+                if (!("children" in temp[g])) {
+                    dict["Key"] = temp[g]["trueName"];
+                    $scope.allUrls.push(dict)
+                } else {
+                    dict["Key"] = temp[g]["trueName"];
+                    $scope.allUrls.push(dict);
+                    deleteUrlExtractor(temp[g]["children"])
+                }
+            }
+        };
+
+        var node = $scope.data;
+        console.log($scope.selectedFileorFoler);
+
+        if ($scope.selectedFileorFoler != "file.server.1") {
+            var splittedPath = $scope.path.split("/").filter(a => a != "");
+            for (var i = 0; i < splittedPath.length; i++) {
+                node = $scope.childrenFinder(node, splittedPath[i])
+            }
+        }
+
+        var dict = {};
+        dict["Key"] = node["trueName"];
+        $scope.allUrls.push(dict);
+        deleteUrlExtractor(node["children"]);
+        console.log($scope.allUrls);
+
+        $http({
+            method: "POST",
+            url: "http://localhost:9000/file-server/delete-object",
+            data: {'Objects': $scope.allUrls}
+        }).then(function mySuccess(response) {
+            console.log(response.data);
+            if (response.data = "Success") {
+                location.reload();
+            }
+
+        }, function myError(error) {
+            console.log(error);
+            alert("Error in Deleting")
+        });
     };
 
 
+// Function to load Graph or File Structure
 
     $http({
         method: "GET",
@@ -247,9 +499,9 @@ app.controller('fileController', function ($scope,$http) {
                 });
             //add arrows if it is a folder
             entered.append("span").attr("class", function (d) {
-                var icon = d.children ? " glyphicon-chevron-down"
-                    : d._children ? "glyphicon-chevron-right" : "";
-                return "caret glyphicon " + icon;
+                var icon = d.children ? " fa-angle-down"
+                    : d._children ? "fa-angle-right" : "";
+                return "fas " + icon;
             }).on("click", function (d) {
                 toggleChildren(d);
                 render(data, d);
@@ -257,21 +509,21 @@ app.controller('fileController', function ($scope,$http) {
             //add icons for folder for file
             entered.append("span").attr("class", function (d) {
                 if(d.children == undefined & d.value == undefined){
-                    return "glyphicon " + "glyphicon-folder-close";
+                    return "fas " + "fa-folder-close";
                 }else{
-                    var icon = d.children || d._children ? "glyphicon-folder-close"
-                        : "glyphicon-file";
-                    return "glyphicon " + icon;
+                    var icon = d.children || d._children ? "fa-folder-open"
+                        : "fa-file";
+                    return "fas " + icon;
                 }
             });
             //add text
             entered.append("span").attr("class", "filename")
                 .html(function (d) { return d.name; });
             //update caret direction
-            nodeEls.select("span.caret").attr("class", function (d) {
-                var icon = d.children ? " glyphicon-chevron-down"
-                    : d._children ? "glyphicon-chevron-right" : "";
-                return "caret glyphicon " + icon;
+            nodeEls.select("span").attr("class", function (d) {
+                var icon = d.children ? " fa-angle-down"
+                    : d._children ? "fa-angle-right" : "";
+                return "fas" + icon;
             });
 
             //update position with transition
@@ -287,5 +539,6 @@ app.controller('fileController', function ($scope,$http) {
         render(data, data);
 
     };
+
 });
 
