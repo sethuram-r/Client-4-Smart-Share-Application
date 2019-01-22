@@ -7,7 +7,7 @@ app.controller('fileController', function ($scope,$http) {
     $scope.path = "Path";
     $scope.addVisible = false;
     $scope.selectedFileorFoler = "";
-    $scope.contents = [];
+
     $scope.files = [];
 
 
@@ -164,7 +164,12 @@ app.controller('fileController', function ($scope,$http) {
                             temp["uploadId"] = uploadId;
                             temp["file"] = reader.result.split(',')[1];
                             temp["name"] = $scope.fileName;
-                            temp["path"] = $scope.selectedFileorFoler + "/";
+                            if ($scope.selectedFileorFoler == "file.server.1") {
+                                temp["path"] = "";
+                            } else {
+                                temp["path"] = $scope.selectedFileorFoler + "/";
+                            }
+
                             $scope.files.push(temp);
 
                             // var temp = $(this).val().split("\\")
@@ -230,8 +235,8 @@ app.controller('fileController', function ($scope,$http) {
 
 
     $scope.download = function () {
-
         var all_urls = [];
+        $scope.contents = [];
 
         var incomingCount = 0;
 
@@ -251,10 +256,7 @@ app.controller('fileController', function ($scope,$http) {
         };
 
         var fileContent = function (param, length, zipObj, zipname) {
-
-            console.log("inside filecontent");
-
-            console.log(incomingCount);
+            // console.log(incomingCount);
 
             $http({
                 method: "GET",
@@ -272,13 +274,9 @@ app.controller('fileController', function ($scope,$http) {
                 $scope.contents.push(contentObj);
 
 
-                console.log(incomingCount);
-                console.log(length);
-
                 if (incomingCount == length) {
 
                     // console.log($scope.contents)
-                    // console.log("filename" + zipname)
 
                     $scope.contents.forEach(function (obj) {
                         if (zipname == "file.server.1") {
@@ -302,28 +300,23 @@ app.controller('fileController', function ($scope,$http) {
 
         };
 
-        if ($scope.path.match(/([a-zA-Z0-9\s_\\.\-\(\):])+(\....)$/)) {
+        if ($scope.path.match(/([a-zA-Z0-9\s_\\.\-\(\):])+(\..*)$/)) {
 
+            console.log("inside if");
             $http({
                 method: "GET",
                 url: "http://localhost:9000/file-server/get-object",
                 headers: {'Content-Type': 'application/octet-stream'},
                 params: {key: $scope.path}
             }).then(function mySuccess(response) {
-
+                console.log($scope.selectedFileorFoler);
                 var url = 'data:application/octet-stream;base64,' + response.data;
-                var downloadLink = document.createElement("a");
-                downloadLink.href = url;
-                downloadLink.download = $scope.selectedFileorFoler;
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
+                download(url, $scope.selectedFileorFoler, "text/plain");
                 $scope.path = "Path"
             }, function myError() {
                 alert("Error in Downloading")
             });
         } else {
-
 
             var urlExtractor = function (object) {
 
@@ -345,6 +338,7 @@ app.controller('fileController', function ($scope,$http) {
 
             var node = $scope.data;
 
+
             if ($scope.selectedFileorFoler != "file.server.1") {
                 var splittedPath = $scope.path.split("/").filter(a => a != "");
 
@@ -356,7 +350,7 @@ app.controller('fileController', function ($scope,$http) {
             var zipFilename = node["name"];
 
             all_urls.concat(urlExtractor(node["children"]));
-            // console.log(all_urls)
+            console.log(all_urls);
             all_urls.forEach(function (url) {
                 fileContent(url, all_urls.length, zip, zipFilename)
             })
@@ -466,7 +460,6 @@ app.controller('fileController', function ($scope,$http) {
                 .style("opacity", 0)
                 .style("height", tree.nodeHeight() + "px")
                 .on("mouseover", function (d) {
-                    $scope.path = d.trueName;
                     d3.select(this).classed("selected", true);
                 })
                 .on("mouseout", function (d) {
@@ -475,7 +468,7 @@ app.controller('fileController', function ($scope,$http) {
                     console.log(d);
                     // $scope.urls = $scope.extractUrls(d)
 
-
+                    $scope.path = d.trueName;
                     $scope.selectedFileorFoler = d.name;
                     if (d.name.match(/([a-zA-Z0-9\s_\\.\-\(\):])+(\....)$/)) {
                         console.log("inside");
