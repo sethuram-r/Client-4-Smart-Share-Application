@@ -95,7 +95,7 @@ app.controller('fileController', function ($scope, $http) {
                                 data: temp
                             }).then(function mySuccess(response) {
                                 console.log(response.data);
-                                if (response.data = "Success") {
+                                if (response.data == "Success") {
                                     $('#uploadModal').modal('hide');
                                     location.reload();
                                     $http({
@@ -112,6 +112,8 @@ app.controller('fileController', function ($scope, $http) {
                                         console.log(error);
                                         alert("Error in releasing locks")
                                     });
+                                } else {
+                                    alert("Error in Uploading")
                                 }
 
                             }, function myError(error) {
@@ -124,7 +126,7 @@ app.controller('fileController', function ($scope, $http) {
                 }, function myError(error) {
                     console.log(error);
                     alert("Error in locking the folder")
-            });
+                });
             } else {
                 alert("Access Restricted! due to Folder being edited by another user")
             }
@@ -451,10 +453,8 @@ app.controller('fileController', function ($scope, $http) {
             console.log("Error in getting Lock status" + error)
         }
     };
-
-
     $scope.delete = function () {
-        console.log("delete");
+
         $http({
             method: "POST",
             url: "http://localhost:9000/file-server/lock-status",
@@ -464,52 +464,106 @@ app.controller('fileController', function ($scope, $http) {
         function successCallback(response) {
             if (response.data == "Success") {
 
-                $scope.allUrls = [];
+                console.log($scope.selectedFileorFoler);
+                var all_urls = [];
 
-                var deleteUrlExtractor = function (temp) {
-
+                var urlExtractor = function (object) {
+                    var temp = object;
+                    console.log((temp));
                     for (var g in temp) {
-                        var dict = {};
-                        if (!("children" in temp[g])) {
-                            dict["Key"] = temp[g]["trueName"];
-                            $scope.allUrls.push(dict)
-                        } else {
-                            dict["Key"] = temp[g]["trueName"];
-                            $scope.allUrls.push(dict);
-                            deleteUrlExtractor(temp[g]["children"])
+                        console.log(temp[g]);
+                        if (typeof (temp[g]) == "object") {
+                            if (!("children" in temp[g])) {
+                                if (temp[g]["trueName"].startsWith($scope.path)) {
+                                    all_urls.push(temp[g]["trueName"])
+                                }
+                            } else {
+                                if (temp[g]["trueName"].startsWith($scope.path)) {
+                                    all_urls.push(temp[g]["trueName"])
+                                }
+                                urlExtractor(temp[g]["children"])
+                            }
                         }
                     }
                 };
-
-                var node = $scope.data;
-                console.log($scope.selectedFileorFoler);
-
-                if ($scope.selectedFileorFoler != "file.server.1") {
-                    var splittedPath = $scope.path.split("/").filter(a => a != "");
-                    for (var i = 0; i < splittedPath.length; i++) {
-                        node = $scope.childrenFinder(node, splittedPath[i])
-                    }
-                }
-
-                var dict = {};
-                dict["Key"] = node["trueName"];
-                $scope.allUrls.push(dict);
-                deleteUrlExtractor(node["children"]);
-                console.log($scope.allUrls);
-
+                urlExtractor($scope.data["children"]);
+                console.log(all_urls);
                 $http({
                     method: "POST",
-                    url: "http://localhost:9000/file-server/delete-object",
-                    data: {'Objects': $scope.allUrls}
+                    url: "http://localhost:9000/file-server/lock-object",
+                    data: {data: all_urls, task: "lock"}
                 }).then(function mySuccess(response) {
                     console.log(response.data);
-                    if (response.data = "Success") {
-                        location.reload();
+                    if (response.data == "Success") {
+
+                        $scope.allUrls = [];
+
+                        var deleteUrlExtractor = function (temp) {
+
+                            for (var g in temp) {
+                                var dict = {};
+                                if (!("children" in temp[g])) {
+                                    dict["Key"] = temp[g]["trueName"];
+                                    $scope.allUrls.push(dict)
+                                } else {
+                                    dict["Key"] = temp[g]["trueName"];
+                                    $scope.allUrls.push(dict);
+                                    deleteUrlExtractor(temp[g]["children"])
+                                }
+                            }
+                        };
+
+                        var node = $scope.data;
+                        console.log($scope.selectedFileorFoler);
+
+                        if ($scope.selectedFileorFoler != "file.server.1") {
+                            var splittedPath = $scope.path.split("/").filter(a => a != "");
+                            for (var i = 0; i < splittedPath.length; i++) {
+                                node = $scope.childrenFinder(node, splittedPath[i])
+                            }
+                        }
+
+                        var dict = {};
+                        dict["Key"] = node["trueName"];
+                        $scope.allUrls.push(dict);
+                        deleteUrlExtractor(node["children"]);
+                        console.log($scope.allUrls);
+
+                        $http({
+                            method: "POST",
+                            url: "http://localhost:9000/file-server/delete-object",
+                            data: {'Objects': $scope.allUrls}
+                        }).then(function mySuccess(response) {
+                            console.log(response.data);
+                            if (response.data == "Success") {
+                                location.reload();
+                                $http({
+                                    method: "POST",
+                                    url: "http://localhost:9000/file-server/lock-object",
+                                    data: {data: all_urls, task: "release"}
+                                }).then(function mySuccess(response) {
+                                    console.log(response.data);
+                                    if (response.data = "Success") {
+                                        console.log("lock released")
+                                    }
+
+                                }, function myError(error) {
+                                    console.log(error);
+                                    alert("Error in releasing locks")
+                                });
+                            } else {
+                                alert("Error in Deleting")
+                            }
+
+                        }, function myError(error) {
+                            console.log(error);
+                            alert("Error in Deleting")
+                        });
                     }
 
                 }, function myError(error) {
                     console.log(error);
-                    alert("Error in Deleting")
+                    alert("Error in locking the folder")
                 });
             } else {
                 alert("Access Restricted! due to Folder being edited by another user")
