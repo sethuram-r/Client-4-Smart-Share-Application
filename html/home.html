@@ -177,9 +177,68 @@
         cursor: pointer;
     }
 
+    a {
+        text-decoration: none;
+    }
+
+    #sticky-social {
+        right: 0;
+        position: fixed;
+        top: 150px;
+    }
+
+    #sticky-social a {
+        color: #fff;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #sticky-social a span {
+        line-height: 35px;
+        right: -100px;
+        position: absolute;
+        text-align: center;
+        width: 100px;
+    }
+
+    #sticky-social a:hover span {
+        right: 100%;
+    }
+
+    #sticky-social a[class*="facebook"],
+    #sticky-social a[class*="facebook"]:hover,
+    #sticky-social a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+    .border-gradient {
+        border: solid 5px;
+        border-image-slice: 1;
+        border-right: 0px;
+    }
+
+    .border-gradient-purple {
+        border-radius: inherit;
+        border-image: linear-gradient(to right, red, orange);
+    }
+
+
 
 </style>
 <body>
+
+<aside id="sticky-social">
+    <ul class="list-group">
+        <li class="list-group-item border-gradient border-gradient-purple"><a href="#!admin" class="entypo-facebook"><i
+                class="fas fa-tachometer-alt"></i><span>Admin</span></a></li>
+    </ul>
+</aside>
 
 <div class="container-fluid" ng-controller="fileController">
     <div class="row">

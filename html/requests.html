@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body {
+        background: #e5e5e5;
+    }
+
+    #sticky-social {
+        left: 0;
+        position: fixed;
+        /*top: 150px;*/
+    }
+
+    #sticky-social a {
+        color: white;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #sticky-social a span {
+        line-height: 35px;
+        left: -100px;
+        position: absolute;
+        text-align: left;
+        width: 100px;
+    }
+
+    #sticky-social a span {
+        left: 100%;
+    }
+
+    #sticky-social a[class*="facebook"],
+    #sticky-social a[class*="facebook"]:hover,
+    #sticky-social a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+    .border-gradient {
+        border: solid 5px;
+        border-image-slice: 1;
+        border-left: 0px;
+        background: white;
+    }
+
+    .border-gradient-username {
+        border: solid 5px;
+        border-image-slice: 1;
+        background: white;
+        border-top: 0px;
+
+    }
+
+    .border-gradient-finder {
+        border: solid 5px;
+        border-image-slice: 1;
+        background: white;
+        border-right: 0px;
+
+    }
+
+    .border-gradient-purple {
+        border-radius: inherit;
+        border-image: linear-gradient(to right, red, orange);
+    }
+
+    #access-requests {
+        left: 0;
+        position: fixed;
+        /*top: 250px;*/
+    }
+
+    #access-requests a {
+        color: white;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #access-requests a span {
+        line-height: 35px;
+        left: -101px;
+        position: absolute;
+        text-align: left;
+        width: 101px;
+    }
+
+    #access-requests a:hover span {
+        left: 100%;
+    }
+
+    #access-requests a[class*="facebook"],
+    #access-requests a[class*="facebook"]:hover,
+    #access-requests a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+    img {
+        border: 1px solid #ddd; /* Gray border */
+        border-radius: 4px; /* Rounded border */
+        padding: 5px; /* Some padding */
+        width: 75px; /* Set a small width */
+    }
+
+    img:hover {
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+
+    .sticky {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 3;
+    }
+
+    #finder {
+        right: 0;
+        position: fixed;
+    }
+
+    #finder a {
+        color: #fff;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #finder a span {
+        line-height: 35px;
+        right: -100px;
+        position: absolute;
+        text-align: center;
+        width: 100px;
+    }
+
+    #finder a:hover span {
+        right: 100%;
+    }
+
+    #finder a[class*="facebook"],
+    #finder a[class*="facebook"]:hover,
+    #finder a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+    .module {
+        /*max-width: 250px;*/
+        text-align: center;
+        padding: 1rem;
+        color: Black;
+        border-width: 5px;
+        border-style: solid;
+        border-image: linear-gradient(
+                to bottom,
+                red,
+                rgba(0, 0, 0, 0)
+        ) 1 100%;
+    }
+
+    * {
+        margin: 0px auto;
+        text-align: center;
+        padding: 0px;
+        list-style: none;
+        font-family: 'Open Sans';
+    }
+
+    .cont_breadcrumbs_1 > ul > li {
+        position: relative;
+        float: left;
+        transform: skewX(-15deg);
+        background-color: #fff;
+        box-shadow: -2px 0px 20px -6px rgba(0, 0, 0, 0.5);
+        z-index: 1;
+        width: 120px;
+        margin-left: -50px;
+        transition: all 0.5s;
+    }
+
+    .cont_breadcrumbs_1 > ul > li > a {
+        display: block;
+        padding: 10px;
+        font-size: 25px;
+        transform: skewX(15deg);
+        text-decoration: none;
+        color: #e92945;
+        font-weight: 400;
+    }
+
+    .cont_breadcrumbs_1 > ul > li:first-child {
+        margin-left: 0px;
+    }
+
+    .cont_breadcrumbs_1 > ul > li:hover {
+        background-color: #ffc8b3;
+
+    }
+
+    .cont_breadcrumbs_1 > ul > li:last-child {
+        background-color: #78909C;
+    }
+
+    .cont_breadcrumbs_1 > ul > li:last-child > a {
+        color: #fff;;
+    }
+
+    .cont_breadcrumbs_1 > ul:hover > li {
+        margin-left: 0px;
+    }
+
+    .border-gradient-breadcrumb {
+        border: solid 5px;
+        border-image-slice: 1;
+        color: white;
+
+    }
+
+    .border-gradient-pink {
+        border-radius: inherit;
+        border-image: linear-gradient(to top left, #ff8a00, #da1b60);
+    }
+
+    .background-gradient-pink {
+        border-radius: inherit;
+        border-image: linear-gradient(to top left, #ff8a00, #da1b60);
+        background-image: linear-gradient(to top left, #ff8a00, #da1b60);
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+        max-height: 250px;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+
+    table {
+        table-layout: fixed;
+    }
+
+    td {
+        word-wrap: break-word
+    }
+
+
+</style>
+<body>
+<div class="container-fluid sticky">
+    <div class="row ">
+        <div class="col-5"></div>
+        <div class="col-2 border-gradient-username border-gradient-purple ">
+            <div class="row">
+
+                <div class="col-4">
+                    <img src="images/icon/avatar-01.jpg">
+                </div>
+                <div class="col-6" style="text-align: center">
+                    <h4>Sethuram Reddy</h4>
+                </div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+        <div class="col-5"></div>
+    </div>
+    <div class="row">
+        <div class="col -6">
+            <aside id="access-requests">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient border-gradient-purple"><a href="#!admin"
+                                                                                          class="entypo-facebook"><i
+                            class="fas fa-tachometer-alt"></i><span>Overview</span></a></li>
+                </ul>
+            </aside>
+        </div>
+        <div class="col-6">
+            <aside id="finder">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient-finder border-gradient-purple"><a href="#!home"
+                                                                                                 class="entypo-facebook"><i
+                            class="fab fa-wpexplorer"></i><span>Finder</span></a></li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+    <div class="row" style="height: 100px"></div>
+    <div class="row">
+        <div class="col-2">
+            <aside id="sticky-social">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient border-gradient-purple"><a href="#!requests"
+                                                                                          class="entypo-facebook"><i
+                            class="far fa-check-square"></i><span> Requests</span></a></li>
+                </ul>
+            </aside>
+        </div>
+        <div class="col-2"></div>
+        <div class="col">
+
+            <div class="cont_breadcrumbs_1">
+                <ul>
+                    <li class="border-gradient-breadcrumb border-gradient-pink"><a href="#"><i
+                            class="zmdi zmdi-cloud-download"></i>&nbspRead</a></li>
+                    <li class="border-gradient-breadcrumb border-gradient-pink"><a href="#"><i
+                            class="zmdi zmdi-cloud-upload"></i>&nbspWrite</a></li>
+                    <li class="border-gradient-breadcrumb border-gradient-pink"><a href="#"><i
+                            class="zmdi zmdi-delete"></i>&nbspDelete</a></li>
+                    <li class="border-gradient-breadcrumb background-gradient-pink"><a href="#">Requests</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="row" style="height: 75px"></div>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col">
+            <table class="table table-data2">
+                <thead>
+                <tr>
+                    <th><h3 style="float: contour;">User Name</h3></th>
+                    <th><h3 style="float: contour;">File/Folder</h3></th>
+                    <th><h3 style="float: contour;">Actions</h3></th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="col-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col">
+            <!-- DATA TABLE -->
+            <div class="table-wrapper-scroll-y">
+                <table class="table table-data2">
+                    <!--<thead>-->
+                    <!--<tr>-->
+                    <!--<th>User Name</th>-->
+                    <!--<th>File/Folder</th>-->
+                    <!--<th></th>-->
+                    <!--</tr>-->
+                    <!--</thead>-->
+                    <tbody>
+                    <tr class="tr-shadow">
+                        <td>Lori Lynch</td>
+                        <td>
+                            <span class="block-email desc">lori@example.com</span>
+                        </td>
+                        <td>
+                            <div class="table-data-feature">
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                    <i class="zmdi zmdi-mail-send"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <i class="zmdi zmdi-edit"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                    <i class="zmdi zmdi-delete"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="More">
+                                    <i class="zmdi zmdi-more"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="spacer"></tr>
+                    <tr class="tr-shadow">
+                        <td>Lori Lynch</td>
+                        <td>
+                            <span class="block-email">john@example.com</span>
+                        </td>
+                        <td>
+                            <div class="table-data-feature">
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                    <i class="zmdi zmdi-mail-send"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <i class="zmdi zmdi-edit"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                    <i class="zmdi zmdi-delete"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="More">
+                                    <i class="zmdi zmdi-more"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="spacer"></tr>
+                    <tr class="tr-shadow">
+                        <td>Lori Lynch</td>
+                        <td>
+                            <span class="block-email">john@example.com</span>
+                        </td>
+                        <td>
+                            <div class="table-data-feature">
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                    <i class="zmdi zmdi-mail-send"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <i class="zmdi zmdi-edit"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                    <i class="zmdi zmdi-delete"></i>
+                                </button>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="More">
+                                    <i class="zmdi zmdi-more"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+
+</div>
+</body>
+</html>

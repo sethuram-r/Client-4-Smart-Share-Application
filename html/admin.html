@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <!-- Title Page-->
+    <title>Dashboard</title>
+</head>
+<style>
+    .page-bakground {
+        background: #e5e5e5;
+        padding-left: 150px;
+        padding-right: 140px;
+    }
+
+    #sticky-social {
+        left: 0;
+        position: fixed;
+        /*top: 150px;*/
+    }
+
+    #sticky-social a {
+        color: white;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #sticky-social a span {
+        line-height: 35px;
+        left: -100px;
+        position: absolute;
+        text-align: left;
+        width: 100px;
+    }
+
+    #sticky-social a span {
+        left: 100%;
+    }
+
+    #sticky-social a[class*="facebook"],
+    #sticky-social a[class*="facebook"]:hover,
+    #sticky-social a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+    .border-gradient {
+        border: solid 5px;
+        border-image-slice: 1;
+        border-left: 0px;
+        background: white;
+    }
+
+    .border-gradient-username {
+        border: solid 5px;
+        border-image-slice: 1;
+        background: white;
+        border-top: 0px;
+
+    }
+
+    .border-gradient-finder {
+        border: solid 5px;
+        border-image-slice: 1;
+        background: white;
+        border-right: 0px;
+
+    }
+
+    .border-gradient-purple {
+        border-radius: inherit;
+        border-image: linear-gradient(to right, red, orange);
+    }
+
+    #access-requests {
+        left: 0;
+        position: fixed;
+        /*top: 250px;*/
+    }
+
+    #access-requests a {
+        color: white;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #access-requests a span {
+        line-height: 35px;
+        left: -101px;
+        position: absolute;
+        text-align: left;
+        width: 101px;
+    }
+
+    #access-requests a:hover span {
+        left: 100%;
+    }
+
+    #access-requests a[class*="facebook"],
+    #access-requests a[class*="facebook"]:hover,
+    #access-requests a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+    img {
+        border: 1px solid #ddd; /* Gray border */
+        border-radius: 4px; /* Rounded border */
+        padding: 5px; /* Some padding */
+        width: 75px; /* Set a small width */
+    }
+
+    img:hover {
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+
+    .sticky {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 3;
+    }
+
+    #finder {
+        right: 0;
+        position: fixed;
+    }
+
+    #finder a {
+        color: #fff;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #finder a span {
+        line-height: 35px;
+        right: -100px;
+        position: absolute;
+        text-align: center;
+        width: 100px;
+    }
+
+    #finder a:hover span {
+        right: 100%;
+    }
+
+    #finder a[class*="facebook"],
+    #finder a[class*="facebook"]:hover,
+    #finder a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+    .grid {
+        padding-right: 10px;
+        padding-left: 10px;
+        background: white;
+    }
+
+    .module {
+        /*max-width: 250px;*/
+        text-align: center;
+        padding: 1rem;
+        color: Black;
+        border-width: 5px;
+        border-style: solid;
+        border-image: linear-gradient(
+                to bottom,
+                red,
+                rgba(0, 0, 0, 0)
+        ) 1 100%;
+    }
+</style>
+<body>
+<div class="container-fluid sticky">
+    <div class="row ">
+        <div class="col-5"></div>
+        <div class="col-2 border-gradient-username border-gradient-purple ">
+            <div class="row">
+
+                <div class="col-4">
+                    <img src="images/icon/avatar-01.jpg">
+                </div>
+                <div class="col-6" style="text-align: center">
+                    <h4>Sethuram Reddy</h4>
+                </div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+        <div class="col-5"></div>
+    </div>
+    <div class="row">
+        <div class="col -6">
+            <aside id="sticky-social">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient border-gradient-purple"><a href="#!admin"
+                                                                                          class="entypo-facebook"><i
+                            class="fas fa-tachometer-alt"></i><span>Overview</span></a></li>
+                </ul>
+            </aside>
+        </div>
+        <div class="col-6">
+            <aside id="finder">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient-finder border-gradient-purple"><a href="#!home"
+                                                                                                 class="entypo-facebook"><i
+                            class="fab fa-wpexplorer"></i><span>Finder</span></a></li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+    <div class="row" style="height: 100px"></div>
+    <div class="row">
+        <div class="col">
+            <aside id="access-requests">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient border-gradient-purple"><a href="#!requests"
+                                                                                          class="entypo-facebook"><i
+                            class="far fa-check-square"></i><span> Requests</span></a></li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid page-bakground">
+    <!-- MAIN CONTENT-->
+    <div class="main-content">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="row m-t-25">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="overview-item overview-item--c1">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-cloud-download"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>10368</h2>
+                                        <span>Read Requests</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-cloud-upload"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>388,688</h2>
+                                        <span>Write Requests</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="overview-item overview-item--c3">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-delete"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>1,086</h2>
+                                        <span>Delete Requests</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="overview-item overview-item--c4">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-account-o"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>$1,060,386</h2>
+                                        <span>Total Users</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class=" title-1 m-b-25 module">Files and Folders accessed by Users</h2>
+                        <div class="card-body grid table-responsive table--no-card m-b-40">
+                            <table id="example" class="display" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>File/Folder</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Tiger Nixon</td>
+                                    <td>System Architect</td>
+                                </tr>
+                                <tr>
+                                    <td>Garrett Winters</td>
+                                    <td>Accountant</td>
+                                </tr>
+                                <tr>
+                                    <td>Ashton Cox</td>
+                                    <td>Junior Technical Author</td>
+                                </tr>
+                                <tr>
+                                    <td>Cedric Kelly</td>
+                                    <td>Senior Javascript Developer</td>
+                                </tr>
+                                <tr>
+                                    <td>Airi Satou</td>
+                                    <td>Accountant</td>
+                                </tr>
+                                <tr>
+                                    <td>Brielle Williamson</td>
+                                    <td>Integration Specialist</td>
+                                </tr>
+                                <tr>
+                                    <td>Herrod Chandler</td>
+                                    <td>Sales Assistant</td>
+                                </tr>
+                                <tr>
+                                    <td>Rhona Davidson</td>
+                                    <td>Integration Specialist</td>
+                                </tr>
+                                <tr>
+                                    <td>Colleen Hurst</td>
+                                    <td>Javascript Developer</td>
+
+                                </tr>
+
+                                <tr>
+                                    <td>Donna Snider</td>
+                                    <td>Customer Support</td>
+                                </tr>
+                                </tbody>
+                                <!--<tfoot>-->
+                                <!--<tr>-->
+                                <!--<th>User Name</th>-->
+                                <!--<th>File/Folder</th>-->
+                                <!--</tr>-->
+                                <!--</tfoot>-->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END MAIN CONTENT-->
+    <!-- END PAGE CONTAINER-->
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "scrollY": "400px",
+            "scrollX": true,
+            "scrollCollapse": true,
+            "paging": false,
+            "searching": false,
+            "info": false,
+            "autoWidth": true,
+            rowGroup: {
+                enable: true,
+                dataSrc: 'User Name'
+            }
+        });
+    });
+</script>
+
+
+</body>
+
+</html>
+<!-- end document-->
