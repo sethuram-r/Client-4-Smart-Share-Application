@@ -8,8 +8,54 @@ app.controller('fileController', function ($scope, $http) {
     $scope.addVisible = false;
     $scope.selectedFileorFoler = "";
     $scope.files = [];
+    $scope.username = "reddy";
+    $scope.read = false;
+    $scope.write = false;
+    $scope.delete_access = false;
+    $scope.owner = "Owner";
 
 
+    $("#readSwitch1").change(function () {
+        ($scope.path == "Path") ? alert("Please select the folder/file") : $scope.request("read");
+        location.reload();
+
+    });
+    $("#writeSwitch1").change(function () {
+        ($scope.path == "Path") ? alert("Please select the folder/file") : $scope.request("write");
+        location.reload();
+    });
+    $("#deleteSwitch1").change(function () {
+        ($scope.path == "Path") ? alert("Please select the folder/file") : $scope.request("delete");
+        location.reload();
+    });
+
+    $scope.request = function (type) {
+
+        console.log(type);
+        if (type == "read") request = type;
+        if (type == "write") request = type;
+        if (type == "delete") request = type;
+
+        $http({
+            method: "GET",
+            url: "http://localhost:9000/file-server/access-request",
+            headers: {'Content-Type': 'application/octet-stream'},
+            params: {path: $scope.path, username: $scope.username, access: request, owner: $scope.owner}
+        }).then(successCallback, errorCallback);
+
+        function successCallback(response) {
+            console.log(response.data);
+            if (response.data == "Success") {
+                alert("Request has been raised successfully");
+                location.reload();
+            }
+        }
+
+    };
+
+    function errorCallback(error) {
+        console.log("Error in sending Access Request" + error)
+    }
     $scope.childrenFinder = function (data, path) {
         data = data["children"];
         for (var j = 0; j < data.length; j++) {
@@ -20,6 +66,7 @@ app.controller('fileController', function ($scope, $http) {
         }
 
     };
+    $('#collapseOne').collapse('show');
 
     $('#inputGroupFile02').on('change', function () {
         console.log("inside");
@@ -34,106 +81,111 @@ app.controller('fileController', function ($scope, $http) {
 
     $scope.upload = function () {
 
-        $http({
-            method: "POST",
-            url: "http://localhost:9000/file-server/lock-status",
-            data: {key: $scope.path}
-        }).then(successCallback, errorCallback);
+        if ($scope.write == true || $scope.path == "file.server.1") {
 
-        function successCallback(response) {
-            if (response.data == "Success") {
+            $http({
+                method: "POST",
+                url: "http://localhost:9000/file-server/lock-status",
+                data: {key: $scope.path}
+            }).then(successCallback, errorCallback);
 
-                console.log($scope.selectedFileorFoler);
-                var all_urls = [];
+            function successCallback(response) {
+                if (response.data == "Success") {
 
-                var urlExtractor = function (object) {
-                    var temp = object;
-                    console.log((temp));
-                    for (var g in temp) {
-                        console.log(temp[g]);
-                        if (typeof (temp[g]) == "object") {
-                            if (!("children" in temp[g])) {
-                                if (temp[g]["trueName"].startsWith($scope.path)) {
-                                    all_urls.push(temp[g]["trueName"])
+                    console.log($scope.selectedFileorFoler);
+                    var all_urls = [];
+
+                    var urlExtractor = function (object) {
+                        var temp = object;
+                        console.log((temp));
+                        for (var g in temp) {
+                            console.log(temp[g]);
+                            if (typeof (temp[g]) == "object") {
+                                if (!("children" in temp[g])) {
+                                    if (temp[g]["trueName"].startsWith($scope.path)) {
+                                        all_urls.push(temp[g]["trueName"])
+                                    }
+                                } else {
+                                    if (temp[g]["trueName"].startsWith($scope.path)) {
+                                        all_urls.push(temp[g]["trueName"])
+                                    }
+                                    urlExtractor(temp[g]["children"])
                                 }
-                            } else {
-                                if (temp[g]["trueName"].startsWith($scope.path)) {
-                                    all_urls.push(temp[g]["trueName"])
-                                }
-                                urlExtractor(temp[g]["children"])
                             }
                         }
-                    }
-                };
-                urlExtractor($scope.data["children"]);
-                console.log(all_urls);
-                $http({
-                    method: "POST",
-                    url: "http://localhost:9000/file-server/lock-object",
-                    data: {data: all_urls, task: "lock"}
-                }).then(function mySuccess(response) {
-                    console.log(response.data);
-                    if (response.data = "Success") {
+                    };
+                    urlExtractor($scope.data["children"]);
+                    console.log(all_urls);
+                    $http({
+                        method: "POST",
+                        url: "http://localhost:9000/file-server/lock-object",
+                        data: {data: all_urls, task: "lock"}
+                    }).then(function mySuccess(response) {
+                        console.log(response.data);
+                        if (response.data = "Success") {
 
-                        console.log("locked");
+                            console.log("locked");
 
-                        if ($scope.selectedFileorFoler == undefined) {
-                            alert("please select the folder")
-                        } else {
+                            if ($scope.selectedFileorFoler == undefined) {
+                                alert("please select the folder")
+                            } else {
 
-                            var temp = $scope.files;
+                                var temp = $scope.files;
 
-                            console.log($scope.files);
+                                console.log($scope.files);
 
-                            temp.forEach(function (file) {
-                                if ("uploadId" in file) delete file["uploadId"];
-                            });
+                                temp.forEach(function (file) {
+                                    if ("uploadId" in file) delete file["uploadId"];
+                                });
 
-                            $http({
-                                method: "POST",
-                                url: "http://localhost:9000/file-server/upload-object",
-                                data: temp
-                            }).then(function mySuccess(response) {
-                                console.log(response.data);
-                                if (response.data == "Success") {
-                                    $('#uploadModal').modal('hide');
-                                    location.reload();
-                                    $http({
-                                        method: "POST",
-                                        url: "http://localhost:9000/file-server/lock-object",
-                                        data: {data: all_urls, task: "release"}
-                                    }).then(function mySuccess(response) {
-                                        console.log(response.data);
-                                        if (response.data = "Success") {
-                                            console.log("lock released")
-                                        }
+                                $http({
+                                    method: "POST",
+                                    url: "http://localhost:9000/file-server/upload-object",
+                                    data: {owner: $scope.username, data: temp}
+                                }).then(function mySuccess(response) {
+                                    console.log(response.data);
+                                    if (response.data == "Success") {
+                                        $('#uploadModal').modal('hide');
+                                        location.reload();
+                                        $http({
+                                            method: "POST",
+                                            url: "http://localhost:9000/file-server/lock-object",
+                                            data: {data: all_urls, task: "release"}
+                                        }).then(function mySuccess(response) {
+                                            console.log(response.data);
+                                            if (response.data = "Success") {
+                                                console.log("lock released")
+                                            }
 
-                                    }, function myError(error) {
-                                        console.log(error);
-                                        alert("Error in releasing locks")
-                                    });
-                                } else {
+                                        }, function myError(error) {
+                                            console.log(error);
+                                            alert("Error in releasing locks")
+                                        });
+                                    } else {
+                                        alert("Error in Uploading")
+                                    }
+
+                                }, function myError(error) {
+                                    console.log(error);
                                     alert("Error in Uploading")
-                                }
-
-                            }, function myError(error) {
-                                console.log(error);
-                                alert("Error in Uploading")
-                            });
+                                });
+                            }
                         }
-                    }
 
-                }, function myError(error) {
-                    console.log(error);
-                    alert("Error in locking the folder")
-                });
-            } else {
-                alert("Access Restricted! due to Folder being edited by another user")
+                    }, function myError(error) {
+                        console.log(error);
+                        alert("Error in locking the folder")
+                    });
+                } else {
+                    alert("Access Restricted! due to Folder being edited by another user")
+                }
             }
-        }
 
-        function errorCallback(error) {
-            console.log("Error in getting Lock status" + error)
+            function errorCallback(error) {
+                console.log("Error in getting Lock status" + error)
+            }
+        } else {
+            alert("No Access to Upload. Request for Permission !")
         }
     };
 
@@ -245,8 +297,8 @@ app.controller('fileController', function ($scope, $http) {
                             $('.file-chooser').append($('.file-chooser__input').clone({withDataAndEvents: true}));
 
                             //add the name and a remove button to the list-group
-                            $('.list-group').append('<li  class="list-group-item" ><span class="list-group__name">' + fileName + '</span><button class="removal-button"  data-uploadid="' + uploadId + '"></button></li>');
-                            $('.list-group').find("li:last").show(700);
+                            $('form >.list-group').append('<li  class="list-group-item" ><span class="list-group__name">' + fileName + '</span><button class="removal-button"  data-uploadid="' + uploadId + '"></button></li>');
+                            $('form >.list-group').find("li:last").show(700);
                             //removal button handle
 
                             $('.removal-button').on('click', function (e) {
@@ -304,284 +356,295 @@ app.controller('fileController', function ($scope, $http) {
 
     $scope.download = function () {
 
+        if ($scope.write == true || $scope.path == "file.server.1") {
 
-        $http({
-            method: "POST",
-            url: "http://localhost:9000/file-server/lock-status",
-            data: {key: $scope.path}
-        }).then(successCallback, errorCallback);
+            $http({
+                method: "POST",
+                url: "http://localhost:9000/file-server/lock-status",
+                data: {key: $scope.path}
+            }).then(successCallback, errorCallback);
 
-        function successCallback(response) {
-            if (response.data == "Success") {
+            function successCallback(response) {
+                if (response.data == "Success") {
 
 
-                var all_urls = [];
-                $scope.contents = [];
+                    var all_urls = [];
+                    $scope.contents = [];
 
-                var incomingCount = 0;
+                    var incomingCount = 0;
 
-                var fileNameModifier = function (selectedNode, fileOrFolderPath) {
+                    var fileNameModifier = function (selectedNode, fileOrFolderPath) {
 
-                    if (!(fileOrFolderPath.includes("/"))) {
-                        return fileOrFolderPath
-                    } else {
-
-                        if (fileOrFolderPath.replace("/", " ").startsWith(selectedNode)) {
+                        if (!(fileOrFolderPath.includes("/"))) {
                             return fileOrFolderPath
                         } else {
-                            return fileOrFolderPath.substr(fileOrFolderPath.search(selectedNode), fileOrFolderPath.length)
-                        }
-                    }
 
-                };
-
-                var fileContent = function (param, length, zipObj, zipname) {
-                    // console.log(incomingCount);
-
-                    $http({
-                        method: "GET",
-                        url: "http://localhost:9000/file-server/get-object",
-                        headers: {'Content-Type': 'application/octet-stream'},
-                        params: {key: param}
-                    }).then(successCallback, errorCallback);
-
-                    function successCallback(response) {
-                        incomingCount = incomingCount + 1;
-                        console.log(response.data);
-                        if (response.data == "Failure") {
-                            alert("File Corrupted")
-                        } else {
-                            var contentObj = {};
-                            contentObj["url"] = param;
-                            contentObj["data"] = response.data;
-                            $scope.contents.push(contentObj);
-
-
-                            if (incomingCount == length) {
-
-                                // console.log($scope.contents)
-
-                                $scope.contents.forEach(function (obj) {
-                                    if (zipname == "file.server.1") {
-                                        var filename = obj["url"]
-                                    } else {
-                                        var filename = fileNameModifier(zipname, obj["url"]);
-                                    }
-                                    zipObj.file(filename, obj["data"], {base64: true});
-                                });
-
-                                zipObj.generateAsync({type: "blob"})
-                                    .then(function (content) {
-                                        saveAs(content, zipname + ".zip");
-                                    });
+                            if (fileOrFolderPath.replace("/", " ").startsWith(selectedNode)) {
+                                return fileOrFolderPath
+                            } else {
+                                return fileOrFolderPath.substr(fileOrFolderPath.search(selectedNode), fileOrFolderPath.length)
                             }
                         }
-                    }
 
-                    function errorCallback(error) {
-                        console.log("Error in Downloading" + error)
-                    }
+                    };
 
-                };
+                    var fileContent = function (param, length, zipObj, zipname) {
+                        // console.log(incomingCount);
 
-                if ($scope.path.match(/([a-zA-Z0-9\s_\\.\-\(\):])+(\..*)$/)) {
+                        $http({
+                            method: "GET",
+                            url: "http://localhost:9000/file-server/get-object",
+                            headers: {'Content-Type': 'application/octet-stream'},
+                            params: {key: param}
+                        }).then(successCallback, errorCallback);
 
-                    console.log("inside if");
-                    $http({
-                        method: "GET",
-                        url: "http://localhost:9000/file-server/get-object",
-                        headers: {'Content-Type': 'application/octet-stream'},
-                        params: {key: $scope.path}
-                    }).then(function mySuccess(response) {
-                        console.log($scope.selectedFileorFoler);
-                        if (response.data == "Failure") {
-                            alert("Error in Downloading")
-                        } else {
-                            var url = 'data:application/octet-stream;base64,' + response.data;
-                            download(url, $scope.selectedFileorFoler, "text/plain");
+                        function successCallback(response) {
+                            incomingCount = incomingCount + 1;
+                            console.log(response.data);
+                            if (response.data == "Failure") {
+                                alert("File Corrupted")
+                            } else {
+                                var contentObj = {};
+                                contentObj["url"] = param;
+                                contentObj["data"] = response.data;
+                                $scope.contents.push(contentObj);
+
+
+                                if (incomingCount == length) {
+
+                                    // console.log($scope.contents)
+
+                                    $scope.contents.forEach(function (obj) {
+                                        if (zipname == "file.server.1") {
+                                            var filename = obj["url"]
+                                        } else {
+                                            var filename = fileNameModifier(zipname, obj["url"]);
+                                        }
+                                        zipObj.file(filename, obj["data"], {base64: true});
+                                    });
+
+                                    zipObj.generateAsync({type: "blob"})
+                                        .then(function (content) {
+                                            saveAs(content, zipname + ".zip");
+                                        });
+                                }
+                            }
                         }
-                        $scope.path = "Path"
-                    }, function myError() {
-                        alert("Error in Downloading")
-                    });
+
+                        function errorCallback(error) {
+                            console.log("Error in Downloading" + error)
+                        }
+
+                    };
+
+                    if ($scope.path.match(/([a-zA-Z0-9\s_\\.\-\(\):])+(\..*)$/)) {
+
+                        console.log("inside if");
+                        $http({
+                            method: "GET",
+                            url: "http://localhost:9000/file-server/get-object",
+                            headers: {'Content-Type': 'application/octet-stream'},
+                            params: {key: $scope.path}
+                        }).then(function mySuccess(response) {
+                            console.log($scope.selectedFileorFoler);
+                            if (response.data == "Failure") {
+                                alert("Error in Downloading")
+                            } else {
+                                var url = 'data:application/octet-stream;base64,' + response.data;
+                                download(url, $scope.selectedFileorFoler, "text/plain");
+                            }
+                            $scope.path = "Path"
+                        }, function myError() {
+                            alert("Error in Downloading")
+                        });
+                    } else {
+
+                        var urlExtractor = function (object) {
+
+                            var temp = object;
+                            console.log((temp));
+                            for (var g in temp) {
+                                console.log(temp[g]);
+                                if (typeof (temp[g]) == "object") {
+
+                                    if (!("children" in temp[g])) {
+                                        all_urls.push(temp[g]["trueName"])
+                                    } else {
+                                        urlExtractor(temp[g]["children"])
+                                    }
+                                }
+                            }
+                        };
+
+
+                        var node = $scope.data;
+
+
+                        if ($scope.selectedFileorFoler != "file.server.1") {
+                            var splittedPath = $scope.path.split("/").filter(a => a != "");
+
+                            for (var i = 0; i < splittedPath.length; i++) {
+                                node = $scope.childrenFinder(node, splittedPath[i])
+                            }
+                        }
+                        var zip = new JSZip();
+                        var zipFilename = node["name"];
+
+                        all_urls.concat(urlExtractor(node["children"]));
+                        console.log(all_urls);
+                        all_urls.forEach(function (url) {
+                            fileContent(url, all_urls.length, zip, zipFilename)
+                        })
+                    }
+
                 } else {
+                    alert("Access Restricted! due to Folder being edited by another user")
+                }
+            }
+
+            function errorCallback(error) {
+                console.log("Error in getting Lock status" + error)
+            }
+        } else {
+            alert("No Access to Download. Request for Permission !")
+        }
+    };
+    $scope.delete = function () {
+
+        if ($scope.write == true || $scope.path == "file.server.1") {
+
+            $http({
+                method: "POST",
+                url: "http://localhost:9000/file-server/lock-status",
+                data: {key: $scope.path}
+            }).then(successCallback, errorCallback);
+
+            function successCallback(response) {
+                if (response.data == "Success") {
+
+                    console.log($scope.selectedFileorFoler);
+                    var all_urls = [];
 
                     var urlExtractor = function (object) {
-
                         var temp = object;
                         console.log((temp));
                         for (var g in temp) {
                             console.log(temp[g]);
                             if (typeof (temp[g]) == "object") {
-
                                 if (!("children" in temp[g])) {
-                                    all_urls.push(temp[g]["trueName"])
+                                    if (temp[g]["trueName"].startsWith($scope.path)) {
+                                        all_urls.push(temp[g]["trueName"])
+                                    }
                                 } else {
+                                    if (temp[g]["trueName"].startsWith($scope.path)) {
+                                        all_urls.push(temp[g]["trueName"])
+                                    }
                                     urlExtractor(temp[g]["children"])
                                 }
                             }
                         }
                     };
-
-
-                    var node = $scope.data;
-
-
-                    if ($scope.selectedFileorFoler != "file.server.1") {
-                        var splittedPath = $scope.path.split("/").filter(a => a != "");
-
-                        for (var i = 0; i < splittedPath.length; i++) {
-                            node = $scope.childrenFinder(node, splittedPath[i])
-                        }
-                    }
-                    var zip = new JSZip();
-                    var zipFilename = node["name"];
-
-                    all_urls.concat(urlExtractor(node["children"]));
+                    urlExtractor($scope.data["children"]);
                     console.log(all_urls);
-                    all_urls.forEach(function (url) {
-                        fileContent(url, all_urls.length, zip, zipFilename)
-                    })
-                }
+                    $http({
+                        method: "POST",
+                        url: "http://localhost:9000/file-server/lock-object",
+                        data: {data: all_urls, task: "lock"}
+                    }).then(function mySuccess(response) {
+                        console.log(response.data);
+                        if (response.data == "Success") {
 
-            } else {
-                alert("Access Restricted! due to Folder being edited by another user")
-            }
-        }
+                            $scope.allUrls = [];
 
-        function errorCallback(error) {
-            console.log("Error in getting Lock status" + error)
-        }
-    };
-    $scope.delete = function () {
+                            var deleteUrlExtractor = function (temp) {
 
-        $http({
-            method: "POST",
-            url: "http://localhost:9000/file-server/lock-status",
-            data: {key: $scope.path}
-        }).then(successCallback, errorCallback);
-
-        function successCallback(response) {
-            if (response.data == "Success") {
-
-                console.log($scope.selectedFileorFoler);
-                var all_urls = [];
-
-                var urlExtractor = function (object) {
-                    var temp = object;
-                    console.log((temp));
-                    for (var g in temp) {
-                        console.log(temp[g]);
-                        if (typeof (temp[g]) == "object") {
-                            if (!("children" in temp[g])) {
-                                if (temp[g]["trueName"].startsWith($scope.path)) {
-                                    all_urls.push(temp[g]["trueName"])
-                                }
-                            } else {
-                                if (temp[g]["trueName"].startsWith($scope.path)) {
-                                    all_urls.push(temp[g]["trueName"])
-                                }
-                                urlExtractor(temp[g]["children"])
-                            }
-                        }
-                    }
-                };
-                urlExtractor($scope.data["children"]);
-                console.log(all_urls);
-                $http({
-                    method: "POST",
-                    url: "http://localhost:9000/file-server/lock-object",
-                    data: {data: all_urls, task: "lock"}
-                }).then(function mySuccess(response) {
-                    console.log(response.data);
-                    if (response.data == "Success") {
-
-                        $scope.allUrls = [];
-
-                        var deleteUrlExtractor = function (temp) {
-
-                            for (var g in temp) {
-                                var dict = {};
-                                if (!("children" in temp[g])) {
-                                    dict["Key"] = temp[g]["trueName"];
-                                    $scope.allUrls.push(dict)
-                                } else {
-                                    dict["Key"] = temp[g]["trueName"];
-                                    $scope.allUrls.push(dict);
-                                    deleteUrlExtractor(temp[g]["children"])
-                                }
-                            }
-                        };
-
-                        var node = $scope.data;
-                        console.log($scope.selectedFileorFoler);
-
-                        if ($scope.selectedFileorFoler != "file.server.1") {
-                            var splittedPath = $scope.path.split("/").filter(a => a != "");
-                            for (var i = 0; i < splittedPath.length; i++) {
-                                node = $scope.childrenFinder(node, splittedPath[i])
-                            }
-                        }
-
-                        var dict = {};
-                        dict["Key"] = node["trueName"];
-                        $scope.allUrls.push(dict);
-                        deleteUrlExtractor(node["children"]);
-                        console.log($scope.allUrls);
-
-                        $http({
-                            method: "POST",
-                            url: "http://localhost:9000/file-server/delete-object",
-                            data: {'Objects': $scope.allUrls}
-                        }).then(function mySuccess(response) {
-                            console.log(response.data);
-                            if (response.data == "Success") {
-                                location.reload();
-                                $http({
-                                    method: "POST",
-                                    url: "http://localhost:9000/file-server/lock-object",
-                                    data: {data: all_urls, task: "release"}
-                                }).then(function mySuccess(response) {
-                                    console.log(response.data);
-                                    if (response.data = "Success") {
-                                        console.log("lock released")
+                                for (var g in temp) {
+                                    var dict = {};
+                                    if (!("children" in temp[g])) {
+                                        dict["Key"] = temp[g]["trueName"];
+                                        $scope.allUrls.push(dict)
+                                    } else {
+                                        dict["Key"] = temp[g]["trueName"];
+                                        $scope.allUrls.push(dict);
+                                        deleteUrlExtractor(temp[g]["children"])
                                     }
+                                }
+                            };
 
-                                }, function myError(error) {
-                                    console.log(error);
-                                    alert("Error in releasing locks")
-                                });
-                            } else {
-                                alert("Error in Deleting")
+                            var node = $scope.data;
+                            console.log($scope.selectedFileorFoler);
+
+                            if ($scope.selectedFileorFoler != "file.server.1") {
+                                var splittedPath = $scope.path.split("/").filter(a => a != "");
+                                for (var i = 0; i < splittedPath.length; i++) {
+                                    node = $scope.childrenFinder(node, splittedPath[i])
+                                }
                             }
 
-                        }, function myError(error) {
-                            console.log(error);
-                            alert("Error in Deleting")
-                        });
-                    }
+                            var dict = {};
+                            dict["Key"] = node["trueName"];
+                            $scope.allUrls.push(dict);
+                            deleteUrlExtractor(node["children"]);
+                            console.log($scope.allUrls);
 
-                }, function myError(error) {
-                    console.log(error);
-                    alert("Error in locking the folder")
-                });
-            } else {
-                alert("Access Restricted! due to Folder being edited by another user")
+                            $http({
+                                method: "POST",
+                                url: "http://localhost:9000/file-server/delete-object",
+                                data: {'Objects': $scope.allUrls, owner: $scope.owner,}
+                            }).then(function mySuccess(response) {
+                                console.log(response.data);
+                                if (response.data == "Success") {
+                                    location.reload();
+                                    $http({
+                                        method: "POST",
+                                        url: "http://localhost:9000/file-server/lock-object",
+                                        data: {data: all_urls, task: "release"}
+                                    }).then(function mySuccess(response) {
+                                        console.log(response.data);
+                                        if (response.data = "Success") {
+                                            console.log("lock released")
+                                        }
+
+                                    }, function myError(error) {
+                                        console.log(error);
+                                        alert("Error in releasing locks")
+                                    });
+                                } else {
+                                    alert("Error in Deleting")
+                                }
+
+                            }, function myError(error) {
+                                console.log(error);
+                                alert("Error in Deleting")
+                            });
+                        }
+
+                    }, function myError(error) {
+                        console.log(error);
+                        alert("Error in locking the folder")
+                    });
+                } else {
+                    alert("Access Restricted! due to Folder being edited by another user")
+                }
             }
-        }
 
-        function errorCallback(error) {
-            console.log("Error in getting Lock status" + error)
+            function errorCallback(error) {
+                console.log("Error in getting Lock status" + error)
+            }
+        } else {
+            alert("No Access to Delete. Request for Permission !")
         }
     };
 
 
 // Function to load Graph or File Structure
 
+
     $http({
         method: "GET",
         url: "http://localhost:9000/file-server/list-objects",
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        params: {username: $scope.username}
         // withCredentials: true
     }).then(function mySuccess(response) {
         $scope.data = response.data;
@@ -596,10 +659,10 @@ app.controller('fileController', function ($scope, $http) {
 
     var id = 0;
     $scope.graph = function (data) {
-        var tree = d3.layout.treelist()
+        var tree = d3version3.layout.treelist()
             .childIndent(15)
             .nodeHeight(30);
-        var ul = d3.select("div.tree").append("ul").classed("treelist", "true");
+        var ul = d3version3.select("div.tree").append("ul").classed("treelist", "true");
 
         function render(data, parent) {
             var nodes = tree.nodes(data),
@@ -625,10 +688,12 @@ app.controller('fileController', function ($scope, $http) {
                 .style("opacity", 0)
                 .style("height", tree.nodeHeight() + "px")
                 .on("mouseover", function (d) {
-                    d3.select(this).classed("selected", true);
+                    d3version3.select(this).classed("selected", true);
+
+
                 })
                 .on("mouseout", function (d) {
-                    d3.selectAll(".selected").classed("selected", false);
+                    d3version3.selectAll(".selected").classed("selected", false);
                 }).on("click", function (d) {
                     console.log(d);
                     // $scope.urls = $scope.extractUrls(d)
@@ -648,8 +713,18 @@ app.controller('fileController', function ($scope, $http) {
                         }
                     });
                     $scope.$apply(function () {
+                        if (d.owner == undefined) {
+                            $scope.owner = "Owner"
+                        } else {
+                            $scope.owner = d.owner
+                        }
+                    });
+                    $scope.$apply(function () {
                         if (d.name != "file.server.1") {
                             $scope.path = d.trueName;
+                            $scope.read = d.read;
+                            $scope.write = d.write;
+                            $scope.delete_access = d.delete;
                         }
                     });
 

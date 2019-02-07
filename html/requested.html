@@ -40,7 +40,7 @@
         width: 100px;
     }
 
-    #sticky-social a span {
+    #sticky-social a:hover span {
         left: 100%;
     }
 
@@ -142,7 +142,7 @@
         width: 101px;
     }
 
-    #waiting a:hover span {
+    #waiting a span {
         left: 100%;
     }
 
@@ -152,6 +152,7 @@
         transition: all 0.4s ease;
         background: linear-gradient(to bottom, red, orange);
     }
+
     img {
         border: 1px solid #ddd; /* Gray border */
         border-radius: 4px; /* Rounded border */
@@ -259,14 +260,6 @@
         transition: all 0.4s ease;
         background: linear-gradient(to bottom, red, orange);
     }
-
-    table {
-        table-layout: fixed;
-    }
-
-    td {
-        word-wrap: break-word
-    }
 </style>
 <body>
 <div class="container-fluid sticky">
@@ -341,13 +334,13 @@
     </div>
 </div>
 
-<div class="container-fluid page-bakground" ng-controller="overviewController">
+<div class="container-fluid page-bakground" ng-controller="requestedController">
     <!-- MAIN CONTENT-->
     <div class="main-content">
         <div class="section__content section__content--p30">
             <div class="container-fluid">
-                <div class="row m-t-25">
-                    <div class="col-sm-6 col-lg-3">
+                <div class="row ">
+                    <div class="col">
                         <div class="overview-item overview-item--c1">
                             <div class="overview__inner">
                                 <div class="overview-box clearfix">
@@ -356,7 +349,7 @@
                                     </div>
                                     <div class="text">
                                         <h2>{{read}}</h2>
-                                        <span style="font-size: medium">Read Requests Approved</span>
+                                        <span>Read Requests</span>
                                     </div>
                                 </div>
                                 <div class="overview-chart">
@@ -364,7 +357,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
+                    <div class=" col">
                         <div class="overview-item overview-item--c2">
                             <div class="overview__inner">
                                 <div class="overview-box clearfix">
@@ -373,7 +366,7 @@
                                     </div>
                                     <div class="text">
                                         <h2>{{write}}</h2>
-                                        <span style="font-size: medium">Write Requests Approved</span>
+                                        <span>Write Requests</span>
                                     </div>
                                 </div>
                                 <div class="overview-chart">
@@ -381,7 +374,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
+                    <div class=" col">
                         <div class="overview-item overview-item--c3">
                             <div class="overview__inner">
                                 <div class="overview-box clearfix">
@@ -390,24 +383,7 @@
                                     </div>
                                     <div class="text">
                                         <h2>{{delete}}</h2>
-                                        <span style="font-size: medium">Delete Requests Approved</span>
-                                    </div>
-                                </div>
-                                <div class="overview-chart">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="overview-item overview-item--c4">
-                            <div class="overview__inner">
-                                <div class="overview-box clearfix">
-                                    <div class="icon">
-                                        <i class="zmdi zmdi-account-o"></i>
-                                    </div>
-                                    <div class="text">
-                                        <h2>{{totalUsers}}</h2>
-                                        <span style="font-size: medium">Total Users</span>
+                                        <span>Delete Requests</span>
                                     </div>
                                 </div>
                                 <div class="overview-chart">
@@ -418,24 +394,33 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <h2 class=" title-1 m-b-25 module">Files and Folders accessed by Users</h2>
-                        <div class="card grid" style="text-align: center; padding: 10px">
-                            <table class="table table-bordered " style="width:100%">
-                                <thead class="thead-dark">
+                        <h2 class=" title-1 m-b-25 module">Files and Folders waiting for Approvals</h2>
+                        <div class="card-body grid table-responsive table--no-card m-b-40"
+                             style="    text-align: center;">
+                            <table id="example" class=" table" style="width:100%">
+                                <thead class="thead-dark position-sticky">
                                 <tr>
-                                    <th scope="col">User Name</th>
-                                    <th scope="col">File/Folder</th>
-                                    <th scope="col">Existing Access</th>
+                                    <th>Owner</th>
+                                    <th>File/Folder</th>
+                                    <th>Access Request</th>
+                                    <th>Status</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
-                                <tbody ng-repeat="record in accessData">
+                                <tbody ng-repeat="m in data">
                                 <tr>
-                                    <td>{{record.name}}</td>
-                                    <td>{{record.file}}</td>
-                                    <td>{{record.access}}</td>
+                                    <td>{{m.owner}}</td>
+                                    <td>{{m.file}}</td>
+                                    <td>{{m.access}}</td>
+                                    <td>{{m.status}}</td>
+                                    <td>
+                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Edit"
+                                                ng-click="deleteRecord()">
+                                            <i class=" fas fa-trash-alt"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
@@ -443,8 +428,6 @@
             </div>
         </div>
     </div>
-    <!-- END MAIN CONTENT-->
-    <!-- END PAGE CONTAINER-->
 </div>
 
 <script>

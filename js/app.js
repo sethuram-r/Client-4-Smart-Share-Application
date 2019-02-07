@@ -8,8 +8,14 @@ app.config(function ($routeProvider) {
         })
         .when("/signup", {
             templateUrl: "html/signup.html"
-        }).when("/home", {
+        }).when("/admin", {
+        templateUrl: "html/admin.html"
+    }).when("/home", {
         templateUrl: "html/home.html"
+    }).when("/requests", {
+        templateUrl: "html/approved.html"
+    }).when("/waiting", {
+        templateUrl: "html/requested.html"
     }).when("/error/:code/message/:message", {
         templateUrl: "html/error.html"
     });

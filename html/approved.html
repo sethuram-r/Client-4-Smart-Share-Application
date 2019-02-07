@@ -45,6 +45,7 @@
         background: linear-gradient(to bottom, red, orange);
     }
 
+
     .border-gradient {
         border: solid 5px;
         border-image-slice: 1;
@@ -162,19 +163,41 @@
         background: linear-gradient(to bottom, red, orange);
     }
 
-    .module {
-        /*max-width: 250px;*/
-        text-align: center;
-        padding: 1rem;
-        color: Black;
-        border-width: 5px;
-        border-style: solid;
-        border-image: linear-gradient(
-                to bottom,
-                red,
-                rgba(0, 0, 0, 0)
-        ) 1 100%;
+    #statistics {
+        right: 0;
+        position: fixed;
     }
+
+    #statistics a {
+        color: #fff;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #statistics a span {
+        line-height: 35px;
+        right: -100px;
+        position: absolute;
+        text-align: right;
+        width: 100px;
+    }
+
+    #statistics a:hover span {
+        right: 100%;
+    }
+
+    #statistics a[class*="facebook"],
+    #statistics a[class*="facebook"]:hover,
+    #statistics a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
 
     * {
         margin: 0px auto;
@@ -196,7 +219,7 @@
         transition: all 0.5s;
     }
 
-    .cont_breadcrumbs_1 > ul > li > a {
+    .cont_breadcrumbs_1 > ul > li > span {
         display: block;
         padding: 10px;
         font-size: 25px;
@@ -219,7 +242,7 @@
         background-color: #78909C;
     }
 
-    .cont_breadcrumbs_1 > ul > li:last-child > a {
+    .cont_breadcrumbs_1 > ul > li:last-child > span {
         color: #fff;;
     }
 
@@ -247,7 +270,7 @@
 
     .table-wrapper-scroll-y {
         display: block;
-        max-height: 250px;
+        max-height: 265px;
         overflow-y: auto;
         -ms-overflow-style: -ms-autohiding-scrollbar;
     }
@@ -260,10 +283,161 @@
         word-wrap: break-word
     }
 
+    .table-data2 {
+        border-collapse: collapse;
+        overflow: visible;
+    }
+
+    .table-data2.table thead th {
+
+        text-transform: uppercase;
+        border: none;
+        font-weight: 800;
+        vertical-align: top;
+        padding: 15px 40px;
+        padding-right: 10px;
+    }
+
+    .table-data2.table thead th:first-child {
+        padding-right: 0;
+    }
+
+    .table-data2.table tbody {
+        background: #fff;
+    }
+
+    .table-data2.table tbody tr {
+        padding: 1rem;
+        color: white;
+        border-width: 3px;
+        border-style: solid;
+        border-top: 0px;
+        border-bottom: 0px;
+        border-color: #fc003e
+
+    }
+
+    .table-data2.table tbody tr td:first-child {
+        -webkit-border-top-left-radius: 3px;
+        -moz-border-radius-topleft: 3px;
+        border-top-left-radius: 3px;
+        -webkit-border-bottom-left-radius: 3px;
+        -moz-border-radius-bottomleft: 3px;
+        border-bottom-left-radius: 3px;
+        vertical-align: top;
+    }
+
+    .table-data2.table tbody tr td:first-child {
+        margin-top: 5px;
+    }
+
+    .table-data2.table tbody tr td:last-child {
+        -webkit-border-top-right-radius: 3px;
+        -moz-border-radius-topright: 3px;
+        border-top-right-radius: 3px;
+        -webkit-border-bottom-right-radius: 3px;
+        -moz-border-radius-bottomright: 3px;
+        border-bottom-right-radius: 3px;
+        padding-right: 35px;
+    }
+
+    .table-data2.table tbody td {
+        font-size: 20px;
+        color: #e92945;
+        font-weight: 800;
+        vertical-align: middle;
+        padding: 25px 40px;
+        padding-right: 10px;
+        border: none;
+    }
+
+    .table-data2 .spacer {
+        height: 5px;
+        background: transparent;
+    }
+
+    .table-data-feature {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: end;
+        -webkit-justify-content: center;
+        -moz-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: center;
+    }
+
+    .table-data-feature .item {
+        display: block;
+        height: 35px;
+        width: 35px;
+        position: relative;
+        -webkit-border-radius: 100%;
+        -moz-border-radius: 100%;
+        border-radius: 100%;
+        background: #e5e5e5;
+        margin-right: 5px;
+    }
+
+    .table-data-feature .item:last-child {
+        margin-right: 0;
+    }
+
+    .table-data-feature .item i {
+        font-size: 25px;
+        color: #e92945;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    #waiting {
+        left: 0;
+        position: fixed;
+        /*top: 250px;*/
+    }
+
+    #waiting a {
+        color: white;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #waiting a span {
+        font-size: medium;
+        line-height: 35px;
+        left: -101px;
+        position: absolute;
+        text-align: left;
+        width: 101px;
+    }
+
+    #waiting a:hover span {
+        left: 100%;
+    }
+
+    #waiting a[class*="facebook"],
+    #waiting a[class*="facebook"]:hover,
+    #waiting a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
 
 </style>
 <body>
-<div class="container-fluid sticky">
+<div class="container-fluid sticky" ng-controller="approvalController">
     <div class="row ">
         <div class="col-5"></div>
         <div class="col-2 border-gradient-username border-gradient-purple ">
@@ -307,7 +481,7 @@
                 <ul class="list-group">
                     <li class="list-group-item border-gradient border-gradient-purple"><a href="#!requests"
                                                                                           class="entypo-facebook"><i
-                            class="far fa-check-square"></i><span> Requests</span></a></li>
+                            class="far fa-check-square"></i><span>Approved</span></a></li>
                 </ul>
             </aside>
         </div>
@@ -316,17 +490,38 @@
 
             <div class="cont_breadcrumbs_1">
                 <ul>
-                    <li class="border-gradient-breadcrumb border-gradient-pink"><a href="#"><i
-                            class="zmdi zmdi-cloud-download"></i>&nbspRead</a></li>
-                    <li class="border-gradient-breadcrumb border-gradient-pink"><a href="#"><i
-                            class="zmdi zmdi-cloud-upload"></i>&nbspWrite</a></li>
-                    <li class="border-gradient-breadcrumb border-gradient-pink"><a href="#"><i
-                            class="zmdi zmdi-delete"></i>&nbspDelete</a></li>
-                    <li class="border-gradient-breadcrumb background-gradient-pink"><a href="#">Requests</a></li>
+                    <li class="border-gradient-breadcrumb border-gradient-pink" ng-click="filter('read')"><span><i
+                            class="zmdi zmdi-cloud-download"></i>&nbspRead</span></li>
+                    <li class="border-gradient-breadcrumb border-gradient-pink" ng-click="filter('write')"><span><i
+                            class="zmdi zmdi-cloud-upload"></i>&nbspWrite</span></li>
+                    <li class="border-gradient-breadcrumb border-gradient-pink" ng-click="filter('delete')"><span><i
+                            class="zmdi zmdi-delete"></i>&nbspDelete</span></li>
+                    <li class="border-gradient-breadcrumb background-gradient-pink"><span>Requests</span></li>
                 </ul>
 
             </div>
 
+        </div>
+        <!--<div class="col-2">-->
+        <!--<aside id="statistics">-->
+        <!--<ul class="list-group">-->
+        <!--<li class="list-group-item border-gradient-finder border-gradient-purple"><a href="#!statistics"-->
+        <!--class="entypo-facebook">-->
+        <!--<i class="fas fa-chart-line"></i><span>Statistics</span></a></li>-->
+        <!--</ul>-->
+        <!--</aside>-->
+        <!--</div>-->
+    </div>
+    <div class="row" style="height: 30px"></div>
+    <div class="row">
+        <div class="col-6">
+            <aside id="waiting">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient border-gradient-purple"><a href="#!waiting"
+                                                                                          class="entypo-facebook"><i
+                            class="fas fa-user-edit"></i><span>Requested</span></a></li>
+                </ul>
+            </aside>
         </div>
     </div>
     <div class="row" style="height: 75px"></div>
@@ -351,82 +546,25 @@
             <!-- DATA TABLE -->
             <div class="table-wrapper-scroll-y">
                 <table class="table table-data2">
-                    <!--<thead>-->
-                    <!--<tr>-->
-                    <!--<th>User Name</th>-->
-                    <!--<th>File/Folder</th>-->
-                    <!--<th></th>-->
-                    <!--</tr>-->
-                    <!--</thead>-->
-                    <tbody>
-                    <tr class="tr-shadow">
-                        <td>Lori Lynch</td>
-                        <td>
-                            <span class="block-email desc">lori@example.com</span>
-                        </td>
+                    <tbody ng-repeat="m in data">
+                    <tr>
+                        <td>{{m.owner}}</td>
+                        <td>{{m.file}}</td>
+                        <td>{{m.access}}</td>
                         <td>
                             <div class="table-data-feature">
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
-                                    <i class="zmdi zmdi-mail-send"></i>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Send"
+                                        ng-click="request('approve')">
+                                    <i class=" zmdi zmdi-check"></i>
                                 </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                    <i class="zmdi zmdi-edit"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-                                    <i class="zmdi zmdi-delete"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                    <i class="zmdi zmdi-more"></i>
+                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit"
+                                        ng-click="request('reject')">
+                                    <i class="zmdi zmdi-close"></i>
                                 </button>
                             </div>
                         </td>
                     </tr>
                     <tr class="spacer"></tr>
-                    <tr class="tr-shadow">
-                        <td>Lori Lynch</td>
-                        <td>
-                            <span class="block-email">john@example.com</span>
-                        </td>
-                        <td>
-                            <div class="table-data-feature">
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
-                                    <i class="zmdi zmdi-mail-send"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                    <i class="zmdi zmdi-edit"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-                                    <i class="zmdi zmdi-delete"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                    <i class="zmdi zmdi-more"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="spacer"></tr>
-                    <tr class="tr-shadow">
-                        <td>Lori Lynch</td>
-                        <td>
-                            <span class="block-email">john@example.com</span>
-                        </td>
-                        <td>
-                            <div class="table-data-feature">
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
-                                    <i class="zmdi zmdi-mail-send"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
-                                    <i class="zmdi zmdi-edit"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
-                                    <i class="zmdi zmdi-delete"></i>
-                                </button>
-                                <button class="item" data-toggle="tooltip" data-placement="top" title="More">
-                                    <i class="zmdi zmdi-more"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
                     </tbody>
                 </table>
             </div>

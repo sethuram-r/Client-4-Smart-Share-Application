@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<head>
 
+</head>
 <style>
 
-    .selected{
+    .selected {
         color: orange;
         font-size: 15px;
         cursor: pointer;
@@ -20,11 +22,13 @@
     .icon-invisible {
         visibility: hidden;
     }
+
     .node {
         position: absolute;
         list-style: none;
         cursor: default;
     }
+
     .node span {
         margin-right: 3px;
     }
@@ -185,6 +189,7 @@
         right: 0;
         position: fixed;
         top: 150px;
+        z-index: 3;
     }
 
     #sticky-social a {
@@ -228,6 +233,102 @@
         border-image: linear-gradient(to right, red, orange);
     }
 
+    #accordion .panel {
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        /* margin: 0 30px 10px 30px;*/
+        overflow: hidden;
+        position: relative;
+    }
+
+    #accordion .panel-heading {
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        position: relative;
+    }
+
+    #accordion .panel-title span {
+        display: block;
+        padding: 15px 20px;
+        margin: 0;
+        background: linear-gradient(to left, #743ad5, #d53a9d);
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #fff;
+        border-radius: 0;
+        position: relative;
+    }
+
+    #accordion .panel-title span.collapsed {
+        background: #743ad5;
+    }
+
+    #accordion .panel-title span:before,
+    #accordion .panel-title span.collapsed:before {
+        content: "\f068";
+        font-family: fontawesome;
+        width: 30px;
+        height: 30px;
+        line-height: 25px;
+        border-radius: 50%;
+        background: linear-gradient(to left, #743ad5, #d53a9d);
+        font-size: 14px;
+        font-weight: normal;
+        color: #fff;
+        text-align: center;
+        border: 3px solid #fff;
+        position: absolute;
+        top: 10px;
+        right: 14px;
+    }
+
+    #accordion .panel-title span.collapsed:before {
+        content: "\f067";
+        background: #d53a9d;
+        border: 4px solid white;
+    }
+
+    #accordion .panel-title span:after,
+    #accordion .panel-title span.collapsed:after {
+        content: "";
+        width: 17px;
+        height: 7px;
+        background: white;
+        position: absolute;
+        top: 22px;
+        right: 0;
+    }
+
+    #accordion .panel-title span.collapsed:after {
+        width: 17px;
+        background: white;
+    }
+
+    #accordion .panel-body {
+        border-left: 3px solid #e51aa2;
+        border-top: none;
+        background: #fff;
+        /*font-size: 15px;*/
+        color: black;
+        line-height: 27px;
+        position: relative;
+    }
+
+    #accordion .panel-body:before {
+        content: "";
+        height: 3px;
+        width: 50%;
+        background: linear-gradient(to left, #743ad5, #d53a9d);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    #accordion .panel-body p {
+        padding: 10px;
+    }
 
 
 </style>
@@ -246,11 +347,82 @@
             <div class="tree"></div>
         </div>
         <div class=col-5>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item active" aria-current="page">{{path}}</li>
-                </ol>
-            </nav>
+
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                                            <span role="button" data-toggle="collapse" data-parent="#accordion"
+                                                  data-target="#collapseOne" aria-expanded="true"
+                                                  aria-controls="collapseOne">
+                                                Metadata
+                                            </span>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
+                         aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <div class="container-fluid">
+                                <div class="row" style="height:5px"></div>
+                                <div class="row">
+                                    <div class="col-1">
+                                        <span class="badge badge-secondary">Path&nbsp;</span>
+
+                                    </div>
+                                    <div class="col">
+                                        <div class="card" style=" text-align: center;font-size: 13px;">
+                                            <span class="label label-default">{{path}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-1">
+                                        <span class="badge badge-secondary">Owner</span>
+
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="col">
+                                        <div class="card" style=" text-align: center;">
+                                            <span class="label label-default">{{owner}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-1">
+                                        <span class="badge badge-secondary">Read</span>
+
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="readSwitch1"
+                                                   ng-checked="read">
+                                            <label class="custom-control-label" for="readSwitch1"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-1">
+                                        <span class="badge badge-secondary">Write</span>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="writeSwitch1"
+                                                   ng-checked="write">
+                                            <label class="custom-control-label" for="writeSwitch1"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-1">
+                                        <span class="badge badge-secondary">Delete</span>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="deleteSwitch1"
+                                                   ng-checked="delete_access">
+                                            <label class="custom-control-label" for="deleteSwitch1"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-1">
             <div class="row" style="height: 10%"></div>
@@ -349,11 +521,12 @@
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
         </div>
     </div>
 </div>
+</div>
+
 
 </body>
 
