@@ -1,7 +1,7 @@
-(function (d3) {
-    d3.layout.treelist = function () {
+(function (d3version3) {
+    d3version3.layout.treelist = function () {
         "use strict";
-        var hierarchy = d3.layout.hierarchy().sort(null).value(null),
+        var hierarchy = d3version3.layout.hierarchy().sort(null).value(null),
             nodeHeight = 0,
             childIndent = 0,
             size;
@@ -69,4 +69,4 @@
         return treelist;
     };
 
-}(d3));
+}(d3version3));

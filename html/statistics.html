@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body {
+        background: #e5e5e5;
+    }
+
+    #sticky-social {
+        left: 0;
+        position: fixed;
+    }
+
+    #sticky-social a {
+        color: white;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #sticky-social a span {
+        line-height: 35px;
+        left: -100px;
+        position: absolute;
+        text-align: left;
+        width: 100px;
+    }
+
+    #sticky-social a:hover span {
+        left: 100%;
+    }
+
+    #sticky-social a[class*="facebook"],
+    #sticky-social a[class*="facebook"]:hover,
+    #sticky-social a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+    #access-requests {
+        left: 0;
+        position: fixed;
+    }
+
+    #access-requests a {
+        color: white;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #access-requests a span {
+        line-height: 35px;
+        left: -101px;
+        position: absolute;
+        text-align: left;
+        width: 101px;
+    }
+
+    #access-requests a:hover span {
+        left: 100%;
+    }
+
+    #access-requests a[class*="facebook"],
+    #access-requests a[class*="facebook"]:hover,
+    #access-requests a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+    .border-gradient {
+        border: solid 5px;
+        border-image-slice: 1;
+        border-left: 0px;
+        background: white;
+    }
+
+    .border-gradient-username {
+        border: solid 5px;
+        border-image-slice: 1;
+        background: white;
+        border-top: 0px;
+
+    }
+
+    .border-gradient-finder {
+        border: solid 5px;
+        border-image-slice: 1;
+        background: white;
+        border-right: 0px;
+
+    }
+
+    .border-gradient-purple {
+        border-radius: inherit;
+        border-image: linear-gradient(to right, red, orange);
+    }
+
+    img {
+        border: 1px solid #ddd; /* Gray border */
+        border-radius: 4px; /* Rounded border */
+        padding: 5px; /* Some padding */
+        width: 75px; /* Set a small width */
+    }
+
+    img:hover {
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+
+    .sticky {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 3;
+    }
+
+    #finder {
+        right: 0;
+        position: fixed;
+    }
+
+    #finder a {
+        color: #fff;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #finder a span {
+        line-height: 35px;
+        right: -100px;
+        position: absolute;
+        text-align: center;
+        width: 100px;
+    }
+
+    #finder a:hover span {
+        right: 100%;
+    }
+
+    #finder a[class*="facebook"],
+    #finder a[class*="facebook"]:hover,
+    #finder a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+    #statistics {
+        right: 0;
+        position: fixed;
+    }
+
+    #statistics a {
+        color: #fff;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #statistics a span {
+        line-height: 35px;
+        right: -100px;
+        position: absolute;
+        text-align: right;
+        width: 100px;
+    }
+
+    #statistics a span {
+        right: 100%;
+    }
+
+    #statistics a[class*="facebook"],
+    #statistics a[class*="facebook"]:hover,
+    #statistics a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+    * {
+        margin: 0px auto;
+        text-align: center;
+        padding: 0px;
+        list-style: none;
+        font-family: 'Open Sans';
+    }
+
+    .cont_breadcrumbs_1 > ul > li {
+        position: relative;
+        float: left;
+        transform: skewX(-15deg);
+        background-color: #fff;
+        box-shadow: -2px 0px 20px -6px rgba(0, 0, 0, 0.5);
+        z-index: 1;
+        width: 120px;
+        /*margin-left: -50px;*/
+        transition: all 0.5s;
+        cursor: none;
+    }
+
+    .cont_breadcrumbs_1 > ul > li > a {
+        display: block;
+        padding: 10px;
+        font-size: 25px;
+        transform: skewX(15deg);
+        text-decoration: none;
+        color: #e92945;
+        font-weight: 400;
+    }
+
+    .cont_breadcrumbs_1 > ul > li:first-child {
+        margin-left: 0px;
+    }
+
+    /*.cont_breadcrumbs_1 > ul > li:hover {*/
+    /*background-color: #ffc8b3;*/
+
+    /*}*/
+
+    .cont_breadcrumbs_1 > ul > li:last-child {
+        background-color: #78909C;
+    }
+
+    .cont_breadcrumbs_1 > ul > li:last-child > a {
+        color: #fff;;
+    }
+
+    .cont_breadcrumbs_1 > ul:hover > li {
+        margin-left: 0px;
+    }
+
+    .border-gradient-breadcrumb {
+        border: solid 5px;
+        border-image-slice: 1;
+        color: white;
+
+    }
+
+    .border-gradient-pink {
+        border-radius: inherit;
+        border-image: linear-gradient(to top left, #ff8a00, #da1b60);
+    }
+
+    .background-gradient-pink {
+        border-radius: inherit;
+        border-image: linear-gradient(to top left, #ff8a00, #da1b60);
+        background-image: linear-gradient(to top left, #ff8a00, #da1b60);
+    }
+
+    #chart .c3-line-data1 {
+        stroke-width: 3px;
+    }
+
+    #chart .c3-line-data2 {
+        stroke-width: 3px;
+    }
+
+    #chart .c3-line-data3 {
+        stroke-width: 3px;
+    }
+
+    #waiting {
+        left: 0;
+        position: fixed;
+        /*top: 250px;*/
+    }
+
+    #waiting a {
+        color: white;
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 35px;
+        position: relative;
+        text-align: center;
+        width: 35px;
+    }
+
+    #waiting a span {
+        font-size: medium;
+        line-height: 35px;
+        left: -101px;
+        position: absolute;
+        text-align: left;
+        width: 101px;
+    }
+
+    #waiting a:hover span {
+        left: 100%;
+    }
+
+    #waiting a[class*="facebook"],
+    #waiting a[class*="facebook"]:hover,
+    #waiting a[class*="facebook"] span {
+        transition: all 0.4s ease;
+        background: linear-gradient(to bottom, red, orange);
+    }
+
+
+</style>
+<body>
+<div class="container-fluid sticky">
+    <div class="row ">
+        <div class="col-5"></div>
+        <div class="col-2 border-gradient-username border-gradient-purple ">
+            <div class="row">
+
+                <div class="col-4">
+                    <img src="images/icon/avatar-01.jpg">
+                </div>
+                <div class="col-6" style="text-align: center">
+                    <h4>Sethuram Reddy</h4>
+                </div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+        <div class="col-5"></div>
+    </div>
+    <div class="row">
+        <div class="col -6">
+            <aside id="sticky-social">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient border-gradient-purple"><a href="#!admin"
+                                                                                          class="entypo-facebook"><i
+                            class="fas fa-tachometer-alt"></i><span>Overview</span></a></li>
+                </ul>
+            </aside>
+        </div>
+        <div class="col-6">
+            <aside id="finder">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient-finder border-gradient-purple"><a href="#!home"
+                                                                                                 class="entypo-facebook"><i
+                            class="fab fa-wpexplorer"></i><span>Finder</span></a></li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+    <div class="row" style="height: 100px"></div>
+    <div class="row">
+        <div class="col-2">
+            <aside id="access-requests">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient border-gradient-purple"><a href="#!requests"
+                                                                                          class="entypo-facebook"><i
+                            class="far fa-check-square"></i><span>Approved</span></a></li>
+                </ul>
+            </aside>
+        </div>
+        <div class="col-2"></div>
+        <div class="col">
+
+            <div class="cont_breadcrumbs_1">
+                <ul>
+                    <li class="border-gradient-breadcrumb border-gradient-pink"><a href="#"><i
+                            class="zmdi zmdi-cloud-download"></i>&nbspRead</a></li>
+                    <li class="border-gradient-breadcrumb border-gradient-pink"><a href="#"><i
+                            class="zmdi zmdi-cloud-upload"></i>&nbspWrite</a></li>
+                    <li class="border-gradient-breadcrumb border-gradient-pink"><a href="#"><i
+                            class="zmdi zmdi-delete"></i>&nbspDelete</a></li>
+                    <li class="border-gradient-breadcrumb background-gradient-pink"><a href="#">Requests</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+        <div class="col-2">
+            <aside id="statistics">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient-finder border-gradient-purple"><a href="#!statistics"
+                                                                                                 class="entypo-facebook">
+                        <i class="fas fa-chart-line"></i><span>Statistics</span></a></li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+    <div class="row" style="height: 30px"></div>
+    <div class="row">
+        <div class="col-6">
+            <aside id="waiting">
+                <ul class="list-group">
+                    <li class="list-group-item border-gradient border-gradient-purple"><a href="#!waiting"
+                                                                                          class="entypo-facebook"><i
+                            class="fas fa-user-edit"></i><span>Requested</span></a></li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+    <div class="row" style="height: 100px"></div>
+    <div class="row">
+        <div class="col">
+            <div class="container card" style="height:400px">
+                <div id="chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var chart = c3.generate({
+        size: {
+            width: 1340
+        },
+        padding: {
+            top: 40,
+            right: 100,
+            bottom: 40,
+            left: 100,
+        },
+        color: {
+            pattern: ['#d0469d', '#00d97b', '#ff2943']
+        },
+        data: {
+            x: 'x',
+//        xFormat: '%Y%m%d', // 'xFormat' can be used as custom format of 'x'
+            columns: [
+                ['x', '2013-01-01', '2013-01-02', '2013-01-03', '2013-01-04', '2013-01-05', '2013-01-06'],
+//            ['x', '20130101', '20130102', '20130103', '20130104', '20130105', '20130106'],
+                ['data1', 30, 200, 100, 400, 150, 250],
+                ['data2', 130, 340, 200, 500, 250, 350],
+                ['data3', 400, 500, 450, 700, 600, 500]
+            ]
+        },
+        axis: {
+            x: {
+                type: 'timeseries',
+                tick: {
+                    format: '%Y-%m-%d'
+                }
+            }
+        }
+    });
+
+</script>
+</body>
+</html>
