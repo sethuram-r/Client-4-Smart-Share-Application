@@ -1,4 +1,4 @@
-app.controller('fileController', function ($scope, $http) {
+app.controller('fileController', function ($scope, $http, $rootScope) {
 
     console.log("inside file Controller");
 
@@ -8,11 +8,34 @@ app.controller('fileController', function ($scope, $http) {
     $scope.addVisible = false;
     $scope.selectedFileorFoler = "";
     $scope.files = [];
-    $scope.username = "reddy";
+    $scope.username = $rootScope.username;
     $scope.read = false;
     $scope.write = false;
     $scope.delete_access = false;
     $scope.owner = "Owner";
+
+    console.log($rootScope.username);
+
+    $rootScope.logOut = function () {
+
+        console.log("inside logout");
+
+
+        $http({
+            method: "GET",
+            url: "http://localhost:9000/logout",
+            headers: {'Content-Type': 'application/octet-stream'},
+            params: {username: $scope.username},
+            withCredentials: true
+        }).then(successCallback, errorCallback);
+
+        function successCallback(response) {
+            console.log(response.data);
+            if (response.data == "Success") {
+                window.location.replace('#!');
+            }
+        }
+    };
 
 
     $("#readSwitch1").change(function () {
@@ -40,7 +63,9 @@ app.controller('fileController', function ($scope, $http) {
             method: "GET",
             url: "http://localhost:9000/file-server/access-request",
             headers: {'Content-Type': 'application/octet-stream'},
-            params: {path: $scope.path, username: $scope.username, access: request, owner: $scope.owner}
+            params: {path: $scope.path, username: $scope.username, access: request, owner: $scope.owner},
+            withCredentials: true
+
         }).then(successCallback, errorCallback);
 
         function successCallback(response) {
@@ -86,7 +111,8 @@ app.controller('fileController', function ($scope, $http) {
             $http({
                 method: "POST",
                 url: "http://localhost:9000/file-server/lock-status",
-                data: {key: $scope.path}
+                data: {key: $scope.path},
+                withCredentials: true
             }).then(successCallback, errorCallback);
 
             function successCallback(response) {
@@ -119,7 +145,8 @@ app.controller('fileController', function ($scope, $http) {
                     $http({
                         method: "POST",
                         url: "http://localhost:9000/file-server/lock-object",
-                        data: {data: all_urls, task: "lock"}
+                        data: {data: all_urls, task: "lock"},
+                        withCredentials: true
                     }).then(function mySuccess(response) {
                         console.log(response.data);
                         if (response.data = "Success") {
@@ -141,7 +168,8 @@ app.controller('fileController', function ($scope, $http) {
                                 $http({
                                     method: "POST",
                                     url: "http://localhost:9000/file-server/upload-object",
-                                    data: {owner: $scope.username, data: temp}
+                                    data: {owner: $scope.username, data: temp},
+                                    withCredentials: true
                                 }).then(function mySuccess(response) {
                                     console.log(response.data);
                                     if (response.data == "Success") {
@@ -361,7 +389,8 @@ app.controller('fileController', function ($scope, $http) {
             $http({
                 method: "POST",
                 url: "http://localhost:9000/file-server/lock-status",
-                data: {key: $scope.path}
+                data: {key: $scope.path},
+                withCredentials: true
             }).then(successCallback, errorCallback);
 
             function successCallback(response) {
@@ -395,7 +424,8 @@ app.controller('fileController', function ($scope, $http) {
                             method: "GET",
                             url: "http://localhost:9000/file-server/get-object",
                             headers: {'Content-Type': 'application/octet-stream'},
-                            params: {key: param}
+                            params: {key: param},
+                            withCredentials: true
                         }).then(successCallback, errorCallback);
 
                         function successCallback(response) {
@@ -444,7 +474,8 @@ app.controller('fileController', function ($scope, $http) {
                             method: "GET",
                             url: "http://localhost:9000/file-server/get-object",
                             headers: {'Content-Type': 'application/octet-stream'},
-                            params: {key: $scope.path}
+                            params: {key: $scope.path},
+                            withCredentials: true
                         }).then(function mySuccess(response) {
                             console.log($scope.selectedFileorFoler);
                             if (response.data == "Failure") {
@@ -516,7 +547,8 @@ app.controller('fileController', function ($scope, $http) {
             $http({
                 method: "POST",
                 url: "http://localhost:9000/file-server/lock-status",
-                data: {key: $scope.path}
+                data: {key: $scope.path},
+                withCredentials: true
             }).then(successCallback, errorCallback);
 
             function successCallback(response) {
@@ -549,7 +581,8 @@ app.controller('fileController', function ($scope, $http) {
                     $http({
                         method: "POST",
                         url: "http://localhost:9000/file-server/lock-object",
-                        data: {data: all_urls, task: "lock"}
+                        data: {data: all_urls, task: "lock"},
+                        withCredentials: true
                     }).then(function mySuccess(response) {
                         console.log(response.data);
                         if (response.data == "Success") {
@@ -590,7 +623,8 @@ app.controller('fileController', function ($scope, $http) {
                             $http({
                                 method: "POST",
                                 url: "http://localhost:9000/file-server/delete-object",
-                                data: {'Objects': $scope.allUrls, owner: $scope.owner,}
+                                data: {'Objects': $scope.allUrls, owner: $scope.owner},
+                                withCredentials: true
                             }).then(function mySuccess(response) {
                                 console.log(response.data);
                                 if (response.data == "Success") {
@@ -598,7 +632,8 @@ app.controller('fileController', function ($scope, $http) {
                                     $http({
                                         method: "POST",
                                         url: "http://localhost:9000/file-server/lock-object",
-                                        data: {data: all_urls, task: "release"}
+                                        data: {data: all_urls, task: "release"},
+                                        withCredentials: true
                                     }).then(function mySuccess(response) {
                                         console.log(response.data);
                                         if (response.data = "Success") {
@@ -644,15 +679,15 @@ app.controller('fileController', function ($scope, $http) {
         method: "GET",
         url: "http://localhost:9000/file-server/list-objects",
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        params: {username: $scope.username}
-        // withCredentials: true
+        params: {username: $scope.username},
+        withCredentials: true
     }).then(function mySuccess(response) {
         $scope.data = response.data;
         $scope.graph(response.data)
 
     }, function myError(response) {
-        console.log(response)
-        // window.location.replace('#!error/404/message/page not found');
+        console.log(response);
+        window.location.replace('#!error/404/message/page not found');
 
     });
 

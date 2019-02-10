@@ -1,8 +1,8 @@
-app.controller('overviewController', function ($scope, $http) {
+app.controller('overviewController', function ($scope, $http, $rootScope) {
     console.log("inside overview Controller");
 
 
-    $scope.username = "sethuram";
+    $scope.username = $rootScope.username;
     $scope.totalUsers = 0;
     $scope.read = 0;
     $scope.write = 0;
@@ -12,7 +12,8 @@ app.controller('overviewController', function ($scope, $http) {
         method: "GET",
         url: "http://localhost:9000/file-server/requested-access",
         headers: {'Content-Type': 'application/octet-stream'},
-        params: {username: $scope.username, role: "username"}
+        params: {username: $scope.username, role: "username"},
+        withCredentials: true
     }).then(successCallback, errorCallback);
 
     function successCallback(response) {
@@ -36,7 +37,8 @@ app.controller('overviewController', function ($scope, $http) {
         method: "GET",
         url: "http://localhost:9000/file-server/file-accessed-others",
         headers: {'Content-Type': 'application/octet-stream'},
-        params: {username: $scope.username}
+        params: {username: $scope.username},
+        withCredentials: true
     }).then(successCallback, errorCallback);
 
     function successCallback(response) {

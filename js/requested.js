@@ -1,7 +1,7 @@
-app.controller('requestedController', function ($scope, $http) {
+app.controller('requestedController', function ($scope, $http, $rootScope) {
     console.log("inside requested Controller");
 
-    $scope.username = "reddy";
+    $scope.username = $rootScope.username;
     $scope.read = 0;
     $scope.write = 0;
     $scope.delete = 0;
@@ -11,7 +11,8 @@ app.controller('requestedController', function ($scope, $http) {
         method: "GET",
         url: "http://localhost:9000/file-server/requested-access",
         headers: {'Content-Type': 'application/octet-stream'},
-        params: {username: $scope.username, role: "username"}
+        params: {username: $scope.username, role: "username"},
+        withCredentials: true
     }).then(successCallback, errorCallback);
 
     function successCallback(response) {
@@ -40,7 +41,8 @@ app.controller('requestedController', function ($scope, $http) {
         $http({
             method: "POST",
             url: "http://localhost:9000/file-server/delete-record",
-            data: record
+            data: record,
+            withCredentials: true
         }).then(successCallback, errorCallback);
 
         function successCallback(response) {

@@ -1,6 +1,6 @@
-app.controller('approvalController', function ($scope, $http) {
+app.controller('approvalController', function ($scope, $http, $rootScope) {
     console.log("inside approval Controller");
-    $scope.username = "sethuram";
+    $scope.username = $rootScope.username;
     $scope.read = [];
     $scope.write = [];
     $scope.delete = [];
@@ -9,7 +9,8 @@ app.controller('approvalController', function ($scope, $http) {
         method: "GET",
         url: "http://localhost:9000/file-server/requested-access",
         headers: {'Content-Type': 'application/octet-stream'},
-        params: {username: $scope.username, role: "owner"}
+        params: {username: $scope.username, role: "owner"},
+        withCredentials: true
     }).then(successCallback, errorCallback);
 
     function successCallback(response) {
@@ -44,7 +45,8 @@ app.controller('approvalController', function ($scope, $http) {
         $http({
             method: "POST",
             url: "http://localhost:9000/file-server/request-status",
-            data: record
+            data: record,
+            withCredentials: true
         }).then(successCallback, errorCallback);
 
         function successCallback(response) {

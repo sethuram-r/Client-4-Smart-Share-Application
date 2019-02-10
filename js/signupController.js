@@ -35,10 +35,11 @@ app.controller('signupController', function ($scope, $http) {
                             url: "http://localhost:9000/signin",
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                             data: data,
-                            withCredentials: true
+                            // withCredentials: true
                         }).then(function mySuccess(response) {
                             console.log(response.data);
                             if(response.data == "Legitamate User"){
+                                $rootScope.username = $scope.username;
                                 window.location.replace('#!home');
                             }else if(response.statusCode == "403"){
                                 window.location.replace('#!error/403/message/Access Denied');
