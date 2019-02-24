@@ -533,6 +533,7 @@
                 <tr>
                     <th><h3 style="float: contour;">User Name</h3></th>
                     <th><h3 style="float: contour;">File/Folder</h3></th>
+                    <th><h3 style="float: contour;">Access</h3></th>
                     <th><h3 style="float: contour;">Actions</h3></th>
                 </tr>
                 </thead>
@@ -548,13 +549,13 @@
                 <table class="table table-data2">
                     <tbody ng-repeat="m in data">
                     <tr>
-                        <td>{{m.owner}}</td>
+                        <td>{{m.username}}</td>
                         <td>{{m.file}}</td>
                         <td>{{m.access}}</td>
                         <td>
                             <div class="table-data-feature">
                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Send"
-                                        ng-click="request('approve')">
+                                        ng-click="request('approve',$event)">
                                     <i class=" zmdi zmdi-check"></i>
                                 </button>
                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Edit"

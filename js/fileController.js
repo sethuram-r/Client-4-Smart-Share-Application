@@ -54,10 +54,14 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
 
     $scope.request = function (type) {
 
+
+        //  This method is used for the user to request access to the file or folder to the owner
+
         console.log(type);
         if (type == "read") request = type;
         if (type == "write") request = type;
         if (type == "delete") request = type;
+
 
         $http({
             method: "GET",
@@ -72,7 +76,7 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
             console.log(response.data);
             if (response.data == "Success") {
                 alert("Request has been raised successfully");
-                location.reload();
+                $scope.getFileExplorer()
             }
         }
 
@@ -173,8 +177,6 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
                                 }).then(function mySuccess(response) {
                                     console.log(response.data);
                                     if (response.data == "Success") {
-                                        $('#uploadModal').modal('hide');
-                                        location.reload();
                                         $http({
                                             method: "POST",
                                             url: "http://localhost:9000/file-server/lock-object",
@@ -182,7 +184,9 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
                                         }).then(function mySuccess(response) {
                                             console.log(response.data);
                                             if (response.data = "Success") {
-                                                console.log("lock released")
+                                                console.log("lock released");
+                                                $('#uploadModal').modal('hide');
+                                                $scope.getFileExplorer();
                                             }
 
                                         }, function myError(error) {
@@ -396,6 +400,8 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
             function successCallback(response) {
                 if (response.data == "Success") {
 
+                    console.log("after success");
+
 
                     var all_urls = [];
                     $scope.contents = [];
@@ -477,6 +483,7 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
                             params: {key: $scope.path},
                             withCredentials: true
                         }).then(function mySuccess(response) {
+                            console.log(response.data);
                             console.log($scope.selectedFileorFoler);
                             if (response.data == "Failure") {
                                 alert("Error in Downloading")
@@ -628,7 +635,9 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
                             }).then(function mySuccess(response) {
                                 console.log(response.data);
                                 if (response.data == "Success") {
-                                    location.reload();
+                                    //
+                                    console.log("checkpoint");
+                                    $scope.getFileExplorer();
                                     $http({
                                         method: "POST",
                                         url: "http://localhost:9000/file-server/lock-object",
@@ -674,26 +683,31 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
 
 // Function to load Graph or File Structure
 
+    $scope.getFileExplorer = function () {
 
-    $http({
-        method: "GET",
-        url: "http://localhost:9000/file-server/list-objects",
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        params: {username: $scope.username},
-        withCredentials: true
-    }).then(function mySuccess(response) {
-        $scope.data = response.data;
-        $scope.graph(response.data)
 
-    }, function myError(response) {
-        console.log(response);
-        window.location.replace('#!error/404/message/page not found');
+        $http({
+            method: "GET",
+            url: "http://localhost:9000/file-server/list-objects",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            params: {username: $rootScope.username},
+            withCredentials: true
+        }).then(function mySuccess(response) {
+            $scope.data = response.data;
+            $scope.graph(response.data)
 
-    });
+        }, function myError(response) {
+            console.log(response);
+            window.location.replace('#!error/404/message/page not found');
+
+        });
+    };
+    $scope.getFileExplorer();
 
 
     var id = 0;
     $scope.graph = function (data) {
+        $(".treelist").remove();
         var tree = d3version3.layout.treelist()
             .childIndent(15)
             .nodeHeight(30);

@@ -10,13 +10,13 @@ app.controller('overviewController', function ($scope, $http, $rootScope) {
     $scope.accessData = "";
     $http({
         method: "GET",
-        url: "http://localhost:9000/file-server/requested-access",
+        url: "http://localhost:9000/file-server/access-approval",
         headers: {'Content-Type': 'application/octet-stream'},
-        params: {username: $scope.username, role: "username"},
+        params: {owner: $scope.username},
         withCredentials: true
-    }).then(successCallback, errorCallback);
+    }).then(successRequestAccessCallback, errorCallback);
 
-    function successCallback(response) {
+    function successRequestAccessCallback(response) {
         console.log(response.data);
         for (i in response.data) {
             if (response.data[i] ["status"] == "approved") {
@@ -39,11 +39,21 @@ app.controller('overviewController', function ($scope, $http, $rootScope) {
         headers: {'Content-Type': 'application/octet-stream'},
         params: {username: $scope.username},
         withCredentials: true
-    }).then(successCallback, errorCallback);
+    }).then(successfileAccessCallback, errorCallback);
 
-    function successCallback(response) {
+    function successfileAccessCallback(response) {
         console.log(response.data);
-        $scope.accessData = response.data
+        $scope.accessData = response.data;
+        var name = "";
+
+
+        for (var i in $scope.accessData) {
+
+            if ($scope.accessData[i]["username"] != name) {
+                name = $scope.accessData[i]["username"];
+                $scope.totalUsers = $scope.totalUsers + 1
+            }
+        }
 
     }
 

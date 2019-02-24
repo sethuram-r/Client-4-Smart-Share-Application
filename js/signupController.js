@@ -1,4 +1,4 @@
-app.controller('signupController', function ($scope, $http) {
+app.controller('signupController', function ($scope, $http, $rootScope) {
 
     console.log("inside signup Controller");
     $scope.username = "";

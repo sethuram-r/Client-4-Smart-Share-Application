@@ -4,12 +4,13 @@ app.controller('approvalController', function ($scope, $http, $rootScope) {
     $scope.read = [];
     $scope.write = [];
     $scope.delete = [];
+    $scope.type = "";
 
     $http({
         method: "GET",
-        url: "http://localhost:9000/file-server/requested-access",
+        url: "http://localhost:9000/file-server/access-approval",
         headers: {'Content-Type': 'application/octet-stream'},
-        params: {username: $scope.username, role: "owner"},
+        params: {owner: $scope.username},
         withCredentials: true
     }).then(successCallback, errorCallback);
 
@@ -17,7 +18,7 @@ app.controller('approvalController', function ($scope, $http, $rootScope) {
         console.log(response.data);
         // $scope.data = response.data
         for (i in response.data) {
-            if (response.data[i] ["status"] != "rejected") {
+            if (response.data[i] ["status"] == "ongoing") {
                 if (response.data[i] ["access"] == "read") $scope.read.push(response.data[i]);
                 if (response.data[i] ["access"] == "write") $scope.write.push(response.data[i]);
                 if (response.data[i] ["access"] == "delete") $scope.delete.push(response.data[i])
@@ -35,13 +36,18 @@ app.controller('approvalController', function ($scope, $http, $rootScope) {
         if (type == "delete") $scope.data = $scope.delete
 
     };
-    $scope.request = function (task) {
+    $scope.request = function (task, event) {
         console.log("inside approve");
-        console.log(this.m);
+        console.log(event.target.parentElement.parentElement.parentElement.className);
+        console.log(event.target.parentElement.parentElement.parentElement);
+        console.log(event.target);
+        object = event.target.parentElement.parentElement.parentElement.parentElement.localName;
         record = this.m;
         delete record["$$hashKey"];
         task == "approve" ? record["status"] = task : record["status"] = "reject";
         console.log(record);
+        $scope.type = record["access"];
+        console.log($scope.type);
         $http({
             method: "POST",
             url: "http://localhost:9000/file-server/request-status",
@@ -51,7 +57,8 @@ app.controller('approvalController', function ($scope, $http, $rootScope) {
 
         function successCallback(response) {
             console.log(response.data);
-            location.reload();
+
+            location.replace("#!/admin");
 
         }
 

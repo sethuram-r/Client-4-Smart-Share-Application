@@ -11,7 +11,7 @@ app.controller('requestedController', function ($scope, $http, $rootScope) {
         method: "GET",
         url: "http://localhost:9000/file-server/requested-access",
         headers: {'Content-Type': 'application/octet-stream'},
-        params: {username: $scope.username, role: "username"},
+        params: {username: $scope.username},
         withCredentials: true
     }).then(successCallback, errorCallback);
 
@@ -47,7 +47,7 @@ app.controller('requestedController', function ($scope, $http, $rootScope) {
 
         function successCallback(response) {
             console.log(response.data);
-            location.reload();
+            location.replace("#!/admin");
 
         }
 
