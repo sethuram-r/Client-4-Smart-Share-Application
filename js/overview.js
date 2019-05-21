@@ -19,10 +19,10 @@ app.controller('overviewController', function ($scope, $http, $rootScope) {
     function successRequestAccessCallback(response) {
         console.log(response.data);
         for (i in response.data) {
-            if (response.data[i] ["status"] == "approved") {
-                if (response.data[i] ["access"] == "read") $scope.read += 1;
-                if (response.data[i] ["access"] == "write") $scope.write += 1;
-                if (response.data[i] ["access"] == "delete") $scope.delete += 1
+            if (response.data[i] ["statusOfRequest"] == "approved") {
+                if (response.data[i] ["accessType"] == "read") $scope.read += 1;
+                if (response.data[i] ["accessType"] == "write") $scope.write += 1;
+                if (response.data[i] ["accessType"] == "delete") $scope.delete += 1
             }
 
         }

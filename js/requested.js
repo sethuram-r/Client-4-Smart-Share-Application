@@ -19,10 +19,10 @@ app.controller('requestedController', function ($scope, $http, $rootScope) {
         console.log(response.data);
         $scope.data = response.data;
         for (i in response.data) {
-            if (response.data[i] ["status"] == "ongoing") {
-                if (response.data[i] ["access"] == "read") $scope.read += 1;
-                if (response.data[i] ["access"] == "write") $scope.write += 1;
-                if (response.data[i] ["access"] == "delete") $scope.delete += 1
+            if (response.data[i] ["statusOfRequest"] == "ongoing") {
+                if (response.data[i] ["accessType"] == "read") $scope.read += 1;
+                if (response.data[i] ["accessType"] == "write") $scope.write += 1;
+                if (response.data[i] ["accessType"] == "delete") $scope.delete += 1
             }
 
         }

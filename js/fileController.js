@@ -122,7 +122,6 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
             function successCallback(response) {
                 if (response.data == "Success") {
 
-                    console.log($scope.selectedFileorFoler);
                     var all_urls = [];
 
                     var urlExtractor = function (object) {
@@ -168,11 +167,17 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
                                 temp.forEach(function (file) {
                                     if ("uploadId" in file) delete file["uploadId"];
                                 });
+                                var selectedFolder = null;
+                                if ($scope.selectedFileorFoler != "file.server.1") {
+
+                                    selectedFolder = $scope.path
+                                }
+                                console.log("selectedFolder---->", selectedFolder);
 
                                 $http({
                                     method: "POST",
                                     url: "http://localhost:9000/file-server/upload-object",
-                                    data: {owner: $scope.username, data: temp},
+                                    data: {owner: $scope.username, data: temp, selectedFolder: selectedFolder},
                                     withCredentials: true
                                 }).then(function mySuccess(response) {
                                     console.log(response.data);
@@ -180,13 +185,15 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
                                         $http({
                                             method: "POST",
                                             url: "http://localhost:9000/file-server/lock-object",
-                                            data: {data: all_urls, task: "release"}
+                                            data: {data: all_urls, task: "release"},
+                                            withCredentials: true
                                         }).then(function mySuccess(response) {
                                             console.log(response.data);
                                             if (response.data = "Success") {
                                                 console.log("lock released");
                                                 $('#uploadModal').modal('hide');
-                                                $scope.getFileExplorer();
+                                                // $scope.getFileExplorer();
+                                                alert("Uploading Initated")
                                             }
 
                                         }, function myError(error) {
@@ -388,7 +395,7 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
 
     $scope.download = function () {
 
-        if ($scope.write == true || $scope.path == "file.server.1") {
+        if ($scope.read == true || $scope.path == "file.server.1") {
 
             $http({
                 method: "POST",
@@ -549,7 +556,7 @@ app.controller('fileController', function ($scope, $http, $rootScope) {
     };
     $scope.delete = function () {
 
-        if ($scope.write == true || $scope.path == "file.server.1") {
+        if ($scope.delete_access == true || $scope.path == "file.server.1") {
 
             $http({
                 method: "POST",

@@ -549,9 +549,9 @@
                 <table class="table table-data2">
                     <tbody ng-repeat="m in data">
                     <tr>
-                        <td>{{m.username}}</td>
+                        <td>{{m.userName}}</td>
                         <td>{{m.file}}</td>
-                        <td>{{m.access}}</td>
+                        <td>{{m.accessType}}</td>
                         <td>
                             <div class="table-data-feature">
                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Send"
@@ -559,7 +559,7 @@
                                     <i class=" zmdi zmdi-check"></i>
                                 </button>
                                 <button class="item" data-toggle="tooltip" data-placement="top" title="Edit"
-                                        ng-click="request('reject')">
+                                        ng-click="request('reject',$event)">
                                     <i class="zmdi zmdi-close"></i>
                                 </button>
                             </div>

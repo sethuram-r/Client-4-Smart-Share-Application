@@ -409,10 +409,10 @@
                                 </thead>
                                 <tbody ng-repeat="m in data">
                                 <tr>
-                                    <td>{{m.owner}}</td>
+                                    <td>{{m.ownerOfFile}}</td>
                                     <td>{{m.file}}</td>
-                                    <td>{{m.access}}</td>
-                                    <td>{{m.status}}</td>
+                                    <td>{{m.accessType}}</td>
+                                    <td>{{m.statusOfRequest}}</td>
                                     <td>
                                         <button class="item" data-toggle="tooltip" data-placement="top" title="Edit"
                                                 ng-click="deleteRecord()">

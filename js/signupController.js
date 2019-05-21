@@ -29,13 +29,12 @@ app.controller('signupController', function ($scope, $http, $rootScope) {
                 }).then(function mySuccess(response) {
                     console.log(response.data);
                     if(response.data == "Legitamate User"){
-                        // window.location.replace('#!');
                         $http({
                             method: "POST",
                             url: "http://localhost:9000/signin",
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                             data: data,
-                            // withCredentials: true
+                            withCredentials: true
                         }).then(function mySuccess(response) {
                             console.log(response.data);
                             if(response.data == "Legitamate User"){
